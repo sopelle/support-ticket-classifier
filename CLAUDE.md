@@ -1,6 +1,6 @@
 # Support Ticket Classifier
 
-An LLM-powered agent that triages support tickets (category, priority, intent),
+An LLM-powered classifier that triages support tickets (category, priority, intent),
 paired with an evaluation harness that measures its own accuracy against a
 labeled test set and tracks regressions across prompt iterations.
 
