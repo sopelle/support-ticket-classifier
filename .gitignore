@@ -1,0 +1,17 @@
+# --- Secrets ---
+.env
+.env.*
+!.env.example
+
+# --- Python virtual environment ---
+.venv/
+venv/
+
+# --- Python caches ---
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+
+# --- macOS system files ---
+.DS_Store
