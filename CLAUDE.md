@@ -34,4 +34,5 @@ Decisions worth not re-litigating:
 - Prefer the standard library. Add a dependency only when it does something the stdlib genuinely cannot
 - Batch-first. Real-time triggering is an adapter concern, not a core concern
 - Structured output via tool use is not MCP; the core calls the API directly
+- `Classification` carries a `reasoning` field, generated before the labels. It is never scored: it exists to make the model reason before deciding, and to make error analysis possible
 - Work is tracked in GitHub issues
