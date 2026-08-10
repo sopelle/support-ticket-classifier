@@ -19,6 +19,7 @@ Ports and adapters: the core knows only its own types and never depends on a tic
 
 - `triage/` : core. `taxonomy.py` (label enums, single source of truth), `models.py` (`Ticket`, `Classification`), `classifier.py` (`classify(ticket)`)
 - `triage/adapters/` : I/O boundaries. Swapping in a real ticketing system means writing a new adapter, not touching the core
+- `triage/prompts/` : prompt source material (rubrics, instructions) as markdown, loaded by the prompt builder rather than inlined as Python strings. Doubles as the human labeling guide for the gold dataset
 - `eval/` : evaluation harness, deliberately outside the core package. Parameterized by dimension (`category`, `priority`, `intent`), not hardcoded to one
 - `scripts/` : entry points (ticket generation, batch runs)
 - `data/knowledge_base/` : the compliance FAQ; grounds ticket generation today, becomes the retrieval source later
