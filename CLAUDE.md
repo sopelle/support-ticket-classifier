@@ -15,7 +15,23 @@ Set the Claude API key in a `.env` file (see `.env.example`).
 ## Conventions
 
 - Pin dependencies to exact versions in `requirements.txt`.
+- The README is the project's showcase. Update it in the same commit whenever results, commands, or project structure change.
+- Numbers claimed in the README must come from an actual evaluation run, never from an estimate. If a run has not happened yet, say so instead of guessing.
 
 ## Architecture
 
-_To be defined during planning._
+Ports and adapters: the core knows only its own types and never depends on a ticketing platform.
+
+- `triage/` : core. `taxonomy.py` (label enums, single source of truth),`models.py` (`Ticket`, `Classification`), `classifier.py` (`classify(ticket)`)
+- `triage/adapters/` : I/O boundaries. Swapping in a real ticketing system means writing a new adapter, not touching the core
+- `eval/` : evaluation harness, deliberately outside the core package. Parameterized by dimension (`category`, `priority`, `intent`), not hardcoded to one
+- `scripts/` : entry points (ticket generation, batch runs)
+- `data/knowledge_base/` : the compliance FAQ; grounds       ticket generation today, becomes the retrieval source later
+
+Decisions worth not re-litigating:
+
+- Stdlib `dataclasses`, not pydantic. The taxonomy enums already reject invalid labels, and the tool-use JSON schema is written by hand on purpose
+- Prefer the standard library. Add a dependency only when it does something the stdlib genuinely cannot
+- Batch-first. Real-time triggering is an adapter concern, not a core concern
+- Structured output via tool use is not MCP; the core calls the API directly
+- Work is tracked in GitHub issues
