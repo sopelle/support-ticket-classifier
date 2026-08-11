@@ -1,0 +1,18 @@
+# Domain-level metadata for the compliance domain - not the taxonomy, not the cause
+# catalog, just what scripts/generate_tickets.py needs to talk about the product.
+
+# How the ticket-generation prompt introduces the product -
+# "You write realistic support tickets for {product_description}."
+product_description: a compliance automation platform (SOC 2 / ISO 27001 / GDPR compliance tooling)
+
+# Domain-flavored instruction text per deadline-pressure level (see
+# scripts/generate_tickets.py's DeadlinePressure) - what "imminent" etc. means is
+# domain vocabulary ("an audit"), the levels themselves are universal.
+deadline_pressure_messaging:
+  imminent: An audit is imminent or already underway, and this is holding it up - the customer should
+    convey that urgency without using the word 'imminent'.
+  scheduled: An audit is scheduled for some time in the future, mentioned in passing, not framed as an
+    immediate deadline.
+  none: No audit is relevant to this request at all.
+  not_mentioned: Do not mention any audit, deadline, or timeline whatsoever - the customer just describes
+    the problem.

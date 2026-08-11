@@ -768,11 +768,3 @@ causes:
   - text: We removed a framework before the 14-day trial ended but got charged for it anyway
     category: account_billing
     kb_file: null
-deadline_pressure_messaging:
-  imminent: An audit is imminent or already underway, and this is holding it up - the customer should
-    convey that urgency without using the word 'imminent'.
-  scheduled: An audit is scheduled for some time in the future, mentioned in passing, not framed as an
-    immediate deadline.
-  none: No audit is relevant to this request at all.
-  not_mentioned: Do not mention any audit, deadline, or timeline whatsoever - the customer just describes
-    the problem.

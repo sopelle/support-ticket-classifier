@@ -22,6 +22,7 @@ DOMAINS_DIR = Path(__file__).resolve().parent.parent / "domains"
 ACTIVE_DOMAIN = os.environ.get("DOMAIN", "compliance")
 DOMAIN_DIR = DOMAINS_DIR / ACTIVE_DOMAIN
 
+DOMAIN_METADATA_PATH = DOMAIN_DIR / "domain.yaml"
 TAXONOMY_PATH = DOMAIN_DIR / "taxonomy.yaml"
 PRIORITY_RUBRIC_PATH = DOMAIN_DIR / "priority_rubric.md"
 CAUSES_PATH = DOMAIN_DIR / "causes.yaml"
@@ -35,8 +36,8 @@ def load_categories() -> dict[str, str]:
 
 
 def load_product_description() -> str:
-    """How the ticket-generation prompt introduces the product - see taxonomy.yaml."""
-    data = yaml.safe_load(TAXONOMY_PATH.read_text())
+    """How the ticket-generation prompt introduces the product - see domain.yaml."""
+    data = yaml.safe_load(DOMAIN_METADATA_PATH.read_text())
     return data["product_description"]
 
 
@@ -75,5 +76,5 @@ def load_deadline_pressure_messaging() -> dict[str, str]:
     """Domain-flavored instruction text per deadline-pressure level (see
     scripts/generate_tickets.py's DeadlinePressure) - what 'imminent' etc. means is
     domain vocabulary ('an audit'), the levels themselves are universal."""
-    data = yaml.safe_load(CAUSES_PATH.read_text())
+    data = yaml.safe_load(DOMAIN_METADATA_PATH.read_text())
     return data["deadline_pressure_messaging"]

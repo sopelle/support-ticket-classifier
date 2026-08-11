@@ -1,10 +1,6 @@
 # Category taxonomy for the compliance domain. What the ticket is about, used for
 # routing and FAQ lookup. triage.taxonomy builds Category from this file at import
 # time - the enum member name is the id upper-cased, the value is the id itself.
-#
-# product_description: how scripts/generate_tickets.py introduces the product to the
-# model writing tickets - "You write realistic support tickets for {product_description}."
-product_description: a compliance automation platform (SOC 2 / ISO 27001 / GDPR compliance tooling)
 categories:
   - id: frameworks
     description: SOC 2 / ISO 27001 / GDPR scoping and setup

@@ -24,7 +24,7 @@ Ports and adapters: the core knows only its own types and never depends on a tic
 
 - `triage/` : core. `taxonomy.py` (label enums, single source of truth — `Category` is built at import time from the active domain pack; `Priority`/`Intent` are universal and static), `domain.py` (loads the active domain pack: categories, causes, priority rubric, knowledge base — swap domains via the `DOMAIN` env var, not code edits), `models.py` (`Ticket`, `Classification`), `classifier.py` (`classify(ticket)`)
 - `triage/adapters/` : I/O boundaries. Swapping in a real ticketing system means writing a new adapter, not touching the core
-- `domains/<name>/` : one product's vocabulary — `taxonomy.yaml` (category list), `priority_rubric.md`, `causes.yaml` (root-cause catalog + domain-flavored messaging), `knowledge_base/*.md`. `domains/compliance/` is the only one today
+- `domains/<name>/` : one product's vocabulary — `domain.yaml` (product description, deadline-pressure messaging), `taxonomy.yaml` (category list), `causes.yaml` (root-cause catalog), `priority_rubric.md`, `knowledge_base/*.md`. Each file holds exactly what its name says, nothing else. `domains/compliance/` is the only one today
 - `eval/` : evaluation harness, deliberately outside the core package. Parameterized by dimension (`category`, `priority`, `intent`), not hardcoded to one
 - `scripts/` : entry points (ticket generation, batch runs)
 
