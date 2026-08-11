@@ -1,24 +1,21 @@
-"""Label taxonomy for a compliance support-ticket classifier.
+"""Label taxonomy for the support-ticket classifier.
 
-These enums are the single source of truth for the classification labels.
-Both the classifier (to constrain the model's output) and the evaluation
-harness (to score predictions against gold labels) import them from here.
+These are the single source of truth for the classification labels. Both the
+classifier (to constrain the model's output) and the evaluation harness (to score
+predictions against gold labels) import them from here.
+
+Category is domain-dependent - it's built at import time from the active domain's
+taxonomy.yaml (see triage/domain.py), so retargeting the classifier to a different
+product doesn't touch this file. Priority and Intent are universal: every domain
+triages by the same urgency levels and the same five requester intents.
 """
 
 from enum import StrEnum
 
+from triage.domain import load_categories
 
-class Category(StrEnum):
-    """What the ticket is about. Used for routing and FAQ lookup."""
-
-    FRAMEWORKS = "frameworks"                # SOC 2 / ISO 27001 / GDPR scoping and setup
-    CONTROLS = "controls"                    # implementing and tracking controls
-    EVIDENCE = "evidence"                    # collecting and uploading evidence
-    INTEGRATIONS = "integrations"            # connecting cloud/SaaS to auto-collect evidence
-    POLICIES = "policies"                    # policy templates, customization, approvals
-    ACCESS_MANAGEMENT = "access_management"  # users, roles, permissions, access reviews
-    AUDITS = "audits"                        # audit preparation and auditor access
-    ACCOUNT_BILLING = "account_billing"      # account setup, subscription, billing
+Category = StrEnum("Category", {cat_id.upper(): cat_id for cat_id in load_categories()})
+Category.__doc__ = "What the ticket is about. Used for routing and FAQ lookup."
 
 
 class Priority(StrEnum):

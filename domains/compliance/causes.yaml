@@ -1,0 +1,778 @@
+# Root-cause catalog for the compliance domain, consumed by scripts/generate_tickets.py.
+# Each cause has one or more symptoms - how a customer would describe it, which may
+# point at a different category than the cause's true_category (misleading_symptom
+# scenarios use that gap on purpose). A symptom's kb_file is set only when its text
+# comes verbatim from a knowledge_base/ troubleshooting entry; invented symptoms
+# (no matching article) leave it null.
+causes:
+- id: controls_not_mapped_to_framework
+  true_category: frameworks
+  description: A batch of controls were added manually and never linked to the framework, so the nightly
+    readiness job has nothing to count even though each control shows Complete.
+  symptoms:
+  - text: Readiness score is stuck at 0% even though controls are marked complete
+    category: frameworks
+    kb_file: frameworks.md
+- id: framework_standard_version_auto_migrated
+  true_category: frameworks
+  description: The account was automatically migrated to a newer version of the framework standard at
+    renewal, changing control numbering and requirements with no explicit heads-up.
+  symptoms:
+  - text: The framework switched to a different version of the standard
+    category: frameworks
+    kb_file: frameworks.md
+- id: framework_control_mapping_mismatch
+  true_category: frameworks
+  description: Two active frameworks scope different systems for what looks like the same control, so
+    the platform can't safely merge them - it creates separate controls instead.
+  symptoms:
+  - text: Shared control mapping isn't showing between two active frameworks
+    category: frameworks
+    kb_file: frameworks.md
+  - text: Duplicate controls appeared after adding a second framework
+    category: controls
+    kb_file: controls.md
+- id: framework_scope_change_not_regenerated
+  true_category: frameworks
+  description: Control lists only regenerate when a scope change is saved, and a queued audit lock is
+    delaying that regeneration.
+  symptoms:
+  - text: Scope changes aren't reflected in the control list
+    category: frameworks
+    kb_file: frameworks.md
+- id: user_lacks_control_permission
+  true_category: controls
+  description: The person being assigned as control owner doesn't have a role with control-management
+    permissions, so the assignment silently fails to save.
+  symptoms:
+  - text: Control owner assignment isn't saving
+    category: controls
+    kb_file: controls.md
+- id: evidence_uploaded_wrong_location
+  true_category: evidence
+  description: The evidence file was uploaded through the general evidence library instead of from the
+    specific control's own page, so it never auto-attached to that control.
+  symptoms:
+  - text: Evidence isn't linking to the control after upload
+    category: evidence
+    kb_file: evidence.md
+  - text: A control shows "Not Started" even though evidence is attached
+    category: controls
+    kb_file: controls.md
+- id: evidence_processing_stuck
+  true_category: evidence
+  description: The uploaded file failed the post-upload OCR/scan step silently and never finished processing.
+  symptoms:
+  - text: Upload is stuck on "Processing"
+    category: evidence
+    kb_file: evidence.md
+- id: evidence_collection_date_backdated
+  true_category: evidence
+  description: The customer entered a collection date in the past when uploading, so the evidence's expiration
+    - calculated from that date - is earlier than they expect.
+  symptoms:
+  - text: Evidence is marked expired but I just uploaded it
+    category: evidence
+    kb_file: evidence.md
+- id: evidence_unsupported_file_format
+  true_category: evidence
+  description: The uploaded file is in a format the platform doesn't accept, such as an Excel file or
+    a HEIC photo, and was rejected outright.
+  symptoms:
+  - text: An uploaded file was rejected as an unsupported format
+    category: evidence
+    kb_file: evidence.md
+- id: integration_credentials_expired
+  true_category: integrations
+  description: The connected integration's OAuth grant or API key was revoked or expired on the source
+    system's side, so the integration silently stopped authenticating.
+  symptoms:
+  - text: An integration shows "Error" or disconnected unexpectedly
+    category: integrations
+    kb_file: integrations.md
+  - text: An automated control keeps failing with a stale integration error
+    category: controls
+    kb_file: controls.md
+- id: integration_scope_revoked
+  true_category: integrations
+  description: A previously granted scope on the connected account was revoked on the source system's
+    side, so syncs silently stop running.
+  symptoms:
+  - text: Sync hasn't run in several days
+    category: integrations
+    kb_file: integrations.md
+- id: integration_connected_with_non_admin_account
+  true_category: integrations
+  description: The integration was authorized using an account without admin-level permissions on the
+    source system, so the platform can't obtain the scopes it needs.
+  symptoms:
+  - text: I get a permission or scope error when connecting
+    category: integrations
+    kb_file: integrations.md
+- id: integration_wrong_account_scoped
+  true_category: integrations
+  description: The integration is connected to a different cloud account or project than the one the resource
+    actually lives in, so nothing is found to collect.
+  symptoms:
+  - text: Evidence isn't appearing after a successful sync
+    category: integrations
+    kb_file: integrations.md
+- id: policy_acknowledgment_version_mismatch
+  true_category: policies
+  description: The employee acknowledged an earlier version of the policy; acknowledgments don't carry
+    over when a new version is published.
+  symptoms:
+  - text: An employee's acknowledgment isn't registering as complete
+    category: policies
+    kb_file: policies.md
+- id: policy_approver_not_configured
+  true_category: policies
+  description: The person configured as the policy's approver was removed from the account, so nothing
+    can move the policy out of Pending Approval.
+  symptoms:
+  - text: A policy is stuck in "Pending Approval"
+    category: policies
+    kb_file: policies.md
+- id: concurrent_editors_conflict
+  true_category: policies
+  description: Two people edited the same policy at once, and one submitted a draft based on an outdated
+    version, silently reverting the other's newer changes.
+  symptoms:
+  - text: A policy reverted to an older version unexpectedly
+    category: policies
+    kb_file: policies.md
+- id: invite_link_expired
+  true_category: access_management
+  description: The invite - teammate or auditor - was sent more than 7 days ago and its link has expired,
+    so it silently stopped working.
+  symptoms:
+  - text: An invited teammate never received the invite email
+    category: access_management
+    kb_file: access_management.md
+  - text: The auditor invite link expired before they used it
+    category: audits
+    kb_file: audits.md
+- id: stale_session_after_role_change
+  true_category: access_management
+  description: The user's role was changed but they're still on an active login session from before the
+    change, so the old permissions apply until they log back in.
+  symptoms:
+  - text: A role change isn't taking effect
+    category: access_management
+    kb_file: access_management.md
+- id: sso_metadata_certificate_mismatch
+  true_category: access_management
+  description: The identity provider rotated its signing certificate and the platform still has the old
+    SSO metadata configured, so the login handshake fails.
+  symptoms:
+  - text: SSO login is failing or stuck in a redirect loop
+    category: access_management
+    kb_file: access_management.md
+- id: user_not_removed_from_source_system
+  true_category: access_management
+  description: The user was removed from the platform but still has an active account on the underlying
+    connected system, so a fresh access-review snapshot still shows them.
+  symptoms:
+  - text: A removed user still appears in an access review
+    category: access_management
+    kb_file: access_management.md
+- id: stale_point_in_time_snapshot
+  true_category: audits
+  description: The document being viewed is a point-in-time snapshot generated earlier and doesn't reflect
+    changes made since - the underlying data is current, the export just isn't regenerated automatically.
+  symptoms:
+  - text: The audit readiness report shows outdated data
+    category: audits
+    kb_file: audits.md
+  - text: The exported PDF is missing recent edits
+    category: policies
+    kb_file: policies.md
+- id: evidence_out_of_audit_scope
+  true_category: audits
+  description: The evidence the auditor is asking about is attached to a control that isn't in scope for
+    the specific audit they were invited to.
+  symptoms:
+  - text: My auditor says they can't access requested evidence
+    category: audits
+    kb_file: audits.md
+  - text: Evidence I uploaded isn't showing up for our auditor
+    category: evidence
+    kb_file: null
+- id: report_download_role_restricted
+  true_category: audits
+  description: Only Admins can download the final audit report by default, and the person asking isn't
+    one.
+  symptoms:
+  - text: The final report or certificate isn't downloadable
+    category: audits
+    kb_file: audits.md
+  - text: I don't have permission to download something I need
+    category: access_management
+    kb_file: null
+- id: billing_seat_count_snapshot_date
+  true_category: account_billing
+  description: The seat count on the invoice reflects active users as of the billing date, not today -
+    a user removed after that date isn't reflected until the next cycle.
+  symptoms:
+  - text: My invoice charged the wrong seat count
+    category: account_billing
+    kb_file: account_billing.md
+  - text: A user we removed from the team is still showing up and we're being charged for them
+    category: access_management
+    kb_file: null
+- id: card_issuer_declining_verification_charge
+  true_category: account_billing
+  description: The card issuer is blocking the small automated verification charge the platform makes
+    when a payment method is added - a common corporate-card policy.
+  symptoms:
+  - text: Updating my payment method is failing
+    category: account_billing
+    kb_file: account_billing.md
+- id: billing_cycle_not_yet_elapsed
+  true_category: account_billing
+  description: A plan downgrade takes effect at the start of the next billing cycle, not immediately,
+    so an invoice generated shortly after still reflects the old plan.
+  symptoms:
+  - text: My downgrade isn't reflected on the next invoice
+    category: account_billing
+    kb_file: account_billing.md
+- id: manual_billing_adjustment_untracked
+  true_category: account_billing
+  description: The charge in question was a one-time adjustment processed manually rather than through
+    the normal invoicing flow, so it has no auto-generated receipt.
+  symptoms:
+  - text: I'm missing a receipt or invoice for a past charge
+    category: account_billing
+    kb_file: account_billing.md
+- id: external_prior_compliance_work_not_recognized
+  true_category: frameworks
+  description: The customer already did equivalent scoping work for a different framework outside the
+    platform and wants it to count toward a new framework - it doesn't automatically.
+  symptoms:
+  - text: Can we get credit toward SOC 2 for work we already did for ISO 27001 outside your platform?
+    category: frameworks
+    kb_file: null
+- id: readiness_score_overstates_actual_coverage
+  true_category: frameworks
+  description: The readiness score reflects control status, not auditor judgment - the auditor can still
+    find gaps in controls the platform shows as 100% ready.
+  symptoms:
+  - text: Our framework says we're 100% ready but our auditor found gaps in fieldwork
+    category: frameworks
+    kb_file: null
+- id: no_framework_preview_before_commit
+  true_category: frameworks
+  description: There's no way to preview a framework's control set before formally adding it to the account.
+  symptoms:
+  - text: Is there a way to preview what our GDPR control set would look like before adding the framework?
+    category: frameworks
+    kb_file: null
+- id: framework_removal_leaves_orphaned_evidence
+  true_category: frameworks
+  description: Removing a framework unlinks its controls but leaves evidence that was only ever attached
+    to those controls with nowhere to go.
+  symptoms:
+  - text: We removed a framework and now some evidence has no controls to attach to
+    category: frameworks
+    kb_file: null
+- id: no_way_to_compare_two_framework_versions
+  true_category: frameworks
+  description: There's no diff or comparison view between the old and new version of a framework standard
+    after a migration.
+  symptoms:
+  - text: Is there a way to see exactly what changed between the old and new version of our framework?
+    category: frameworks
+    kb_file: null
+- id: scoping_wizard_multi_entity_unsupported
+  true_category: frameworks
+  description: The framework scoping wizard assumes a single legal entity - it has no concept of multiple
+    subsidiaries needing separate or combined scoping.
+  symptoms:
+  - text: Our scoping only lets us pick one legal entity, but we have three subsidiaries in this framework
+    category: frameworks
+    kb_file: null
+- id: framework_certificate_legal_entity_name_mismatch
+  true_category: frameworks
+  description: The legal entity name on the account doesn't match what's printed on the issued framework
+    certificate, and there's no self-serve way to correct it.
+  symptoms:
+  - text: The company name on our framework's certificate doesn't match our legal entity name and I can't
+      find where to fix it
+    category: frameworks
+    kb_file: null
+  - text: Our invoices show the wrong company name and I don't know where to update it
+    category: account_billing
+    kb_file: null
+- id: single_owner_per_control_limitation
+  true_category: controls
+  description: A control can only have one assigned owner - there's no way to represent shared responsibility
+    across two people.
+  symptoms:
+  - text: Can a control have two owners for shared responsibilities?
+    category: controls
+    kb_file: null
+- id: control_test_result_stale_between_runs
+  true_category: controls
+  description: An automated control's status only updates on its next scheduled test run, so a process
+    that broke after the last passing run still shows as Passing.
+  symptoms:
+  - text: A control test passed last night but the underlying process actually failed this morning
+    category: controls
+    kb_file: null
+- id: no_staleness_based_auto_fail_rule
+  true_category: controls
+  description: There's no setting to auto-fail a control whose automated test hasn't run recently, even
+    if its last recorded result was a pass.
+  symptoms:
+  - text: Can I set a control to auto-fail if its test hasn't run in 30 days, even with a passing last
+      result?
+    category: controls
+    kb_file: null
+- id: control_bulk_edit_no_audit_trail
+  true_category: controls
+  description: A bulk status change touched dozens of controls at once and there's no per-control record
+    of who made the change or an easy way to undo it in bulk.
+  symptoms:
+  - text: Someone accidentally marked 20 controls complete and I can't see who did it or undo it in bulk
+    category: controls
+    kb_file: null
+  - text: I can't tell who changed a bunch of our controls' status
+    category: access_management
+    kb_file: null
+- id: control_note_field_has_no_history
+  true_category: controls
+  description: The notes field on a control only stores the current text - earlier versions aren't kept,
+    so an edit silently overwrites what a teammate wrote.
+  symptoms:
+  - text: The notes field on a control just shows the latest text - I can't see what a teammate wrote
+      before they edited it
+    category: controls
+    kb_file: null
+- id: no_control_dependency_linking
+  true_category: controls
+  description: Controls are independent records - there's no way to mark one as blocked by or dependent
+    on another.
+  symptoms:
+  - text: Can I mark one control as blocked by another so they show as related?
+    category: controls
+    kb_file: null
+- id: control_evidence_requirement_unclear_for_custom_controls
+  true_category: controls
+  description: Custom, self-authored controls have no guidance on what evidence would actually satisfy
+    them, unlike template controls which specify this.
+  symptoms:
+  - text: For a control we wrote ourselves, there's nothing telling us what kind of evidence would satisfy
+      it
+    category: controls
+    kb_file: null
+- id: bulk_control_status_change_not_supported
+  true_category: controls
+  description: Control status can only be changed one control at a time - there's no multi-select bulk
+    action.
+  symptoms:
+  - text: Is there a way to update the status on multiple controls at once instead of one at a time?
+    category: controls
+    kb_file: null
+- id: control_reassignment_no_notification
+  true_category: controls
+  description: Reassigning a control's owner doesn't trigger any notification to the new owner.
+  symptoms:
+  - text: I reassigned a control to a teammate and they had no idea until I mentioned it - is there a
+      notification for that?
+    category: controls
+    kb_file: null
+- id: cross_framework_control_edit_scope_limited
+  true_category: controls
+  description: Editing a control that's shared across two frameworks only updates the copy under the framework
+    you were viewing when you made the edit.
+  symptoms:
+  - text: I edited a shared control's description but it only changed for one of our two frameworks
+    category: controls
+    kb_file: null
+- id: no_bulk_evidence_upload_capability
+  true_category: evidence
+  description: Evidence has to be uploaded one file at a time, per control - there's no bulk upload path
+    for attaching many files across many controls at once.
+  symptoms:
+  - text: Can I bulk-upload evidence for 50 controls at once?
+    category: evidence
+    kb_file: null
+- id: no_evidence_recovery_after_deletion
+  true_category: evidence
+  description: Deleted evidence isn't recoverable - there's no trash or undo for evidence removal.
+  symptoms:
+  - text: Evidence I deleted by mistake seems permanently gone
+    category: evidence
+    kb_file: null
+- id: evidence_reuse_across_annual_cycles_unclear
+  true_category: evidence
+  description: Evidence collected in one cycle doesn't automatically roll forward or expire in a way that's
+    obvious to a customer planning next year's collection.
+  symptoms:
+  - text: Does evidence collected for a control automatically count toward next year's cycle, or do we
+      redo it all?
+    category: evidence
+    kb_file: null
+- id: evidence_preview_fails_for_large_files
+  true_category: evidence
+  description: Files above a certain size don't render in the in-browser preview and have to be downloaded
+    to view.
+  symptoms:
+  - text: Evidence files over a certain size won't preview in the browser, I have to download them every
+      time
+    category: evidence
+    kb_file: null
+- id: evidence_owner_field_not_editable
+  true_category: evidence
+  description: The uploader recorded against a piece of evidence is fixed at upload time and can't be
+    reassigned afterward, even when attribution should change.
+  symptoms:
+  - text: I uploaded evidence under the wrong person's name and can't seem to change who it's attributed
+      to
+    category: evidence
+    kb_file: null
+  - text: Evidence is attributed to someone who's no longer on our team and I want it re-attributed
+    category: access_management
+    kb_file: null
+- id: no_pre_auditor_evidence_review_status
+  true_category: evidence
+  description: There's no internal-only review status for evidence - it's either uploaded or not, with
+    no way to mark it as internally vetted before an auditor sees it.
+  symptoms:
+  - text: Is there a status I can set on evidence to show it's been reviewed internally before the auditor
+      sees it?
+    category: evidence
+    kb_file: null
+- id: evidence_search_no_partial_filename_match
+  true_category: evidence
+  description: The evidence library's search only matches complete filenames, not substrings.
+  symptoms:
+  - text: Searching the evidence library for part of a filename doesn't find anything unless I type the
+      whole thing
+    category: evidence
+    kb_file: null
+- id: on_prem_identity_provider_unsupported
+  true_category: integrations
+  description: The platform's integrations target cloud identity providers - there's no supported path
+    for connecting an on-premises directory.
+  symptoms:
+  - text: Do you support connecting our on-prem Active Directory, not just cloud identity providers?
+    category: integrations
+    kb_file: null
+- id: duplicate_sync_run_race_condition
+  true_category: integrations
+  description: An integration's scheduled sync and a manually triggered sync overlapped, and evidence
+    from both runs was recorded, doubling the count.
+  symptoms:
+  - text: Our integration sync ran twice in the same hour and doubled our evidence count
+    category: integrations
+    kb_file: null
+- id: no_integration_disconnect_webhook
+  true_category: integrations
+  description: There's no outbound notification when an integration disconnects - customers only find
+    out by checking the dashboard.
+  symptoms:
+  - text: Can we get a webhook that fires whenever an integration disconnects?
+    category: integrations
+    kb_file: null
+- id: integration_sync_history_not_visible
+  true_category: integrations
+  description: There's no log of what a specific sync actually pulled in - only the current resulting
+    evidence, not a history of runs.
+  symptoms:
+  - text: Is there a log anywhere showing what an integration actually pulled in on its last sync?
+    category: integrations
+    kb_file: null
+- id: cant_scope_integration_to_resource_subset
+  true_category: integrations
+  description: An integration connects to the whole account or project - there's no way to limit it to
+    a subset of resources.
+  symptoms:
+  - text: Can we connect only part of our AWS account instead of the whole thing?
+    category: integrations
+    kb_file: null
+- id: integration_reconnect_loses_historical_mapping
+  true_category: integrations
+  description: Reconnecting a disconnected integration doesn't restore prior evidence-to-control mappings
+    - they have to be redone by hand.
+  symptoms:
+  - text: After reconnecting our integration, evidence that used to map automatically now needs to be
+      re-linked by hand
+    category: integrations
+    kb_file: null
+- id: no_sandbox_mode_for_new_integration
+  true_category: integrations
+  description: There's no test or preview mode for connecting an integration - authorizing it starts real
+    evidence collection immediately.
+  symptoms:
+  - text: Is there a way to test-connect an integration without it immediately starting to collect real
+      evidence?
+    category: integrations
+    kb_file: null
+- id: no_multilingual_policy_support
+  true_category: policies
+  description: Policy templates and custom policies are English-only - there's no built-in translation
+    or localization.
+  symptoms:
+  - text: Can policies be translated into other languages for our EU staff?
+    category: policies
+    kb_file: null
+- id: acknowledgment_not_visible_to_managers
+  true_category: policies
+  description: Policy acknowledgment status is visible on the policy's own page, but there's no manager-facing
+    view scoped to their direct reports.
+  symptoms:
+  - text: An employee acknowledged a policy but their manager can't see that confirmation anywhere
+    category: policies
+    kb_file: null
+- id: no_two_step_policy_acknowledgment_workflow
+  true_category: policies
+  description: Policy acknowledgment is a single step - there's no way to require a manager's sign-off
+    in addition to the employee's own acknowledgment.
+  symptoms:
+  - text: Can we require a manager's approval in addition to the employee's acknowledgment for high-risk
+      policies?
+    category: policies
+    kb_file: null
+- id: policy_template_edits_not_retroactive
+  true_category: policies
+  description: Updating a policy template only affects new policies created from it - already-published
+    policies don't pick up the change.
+  symptoms:
+  - text: We updated a policy template's wording but our already-published policy didn't pick up the change
+    category: policies
+    kb_file: null
+- id: no_scheduled_future_policy_publish
+  true_category: policies
+  description: Policies publish immediately when approved - there's no way to schedule a publish date
+    in the future.
+  symptoms:
+  - text: Can I schedule a policy to publish automatically on a specific future date instead of publishing
+      it manually?
+    category: policies
+    kb_file: null
+- id: policy_attachment_size_limit_too_small
+  true_category: policies
+  description: Supporting documents attached to a policy are capped at a size limit that's too small for
+    some customers' files.
+  symptoms:
+  - text: I'm trying to attach a large supporting document to a policy and it's being rejected for size
+    category: policies
+    kb_file: null
+  - text: A file I'm trying to attach keeps getting rejected for being too large
+    category: evidence
+    kb_file: null
+- id: no_custom_policy_review_reminder
+  true_category: policies
+  description: The only review reminder is the standard annual one - there's no way to set a custom cadence
+    for a specific policy.
+  symptoms:
+  - text: Is there a way to set a custom review reminder for a policy that isn't the standard annual one?
+    category: policies
+    kb_file: null
+- id: no_department_scoped_policy_assignment
+  true_category: policies
+  description: Policies apply account-wide - there's no way to assign different sets of policies to different
+    departments.
+  symptoms:
+  - text: Can we assign different sets of policies to different departments instead of everyone getting
+      everything?
+    category: policies
+    kb_file: null
+- id: no_custom_role_between_contributor_and_admin
+  true_category: access_management
+  description: Roles are limited to Admin, Contributor, and Viewer - there's no way to create a narrower
+    custom role, such as one with Contributor access but no billing visibility.
+  symptoms:
+  - text: Can we have a role between Contributor and Admin with narrower billing access?
+    category: access_management
+    kb_file: null
+- id: shared_login_credentials_no_individual_attribution
+  true_category: access_management
+  description: Two people are using the same login instead of separate accounts, so actions in the audit
+    log can't be attributed to a specific individual.
+  symptoms:
+  - text: Two people on our team seem to share one login and I can't tell who did what
+    category: access_management
+    kb_file: null
+- id: access_review_not_scoped_per_framework
+  true_category: access_management
+  description: Access reviews cover the whole account at once - there's no way to scope one to just the
+    users and systems relevant to a single framework.
+  symptoms:
+  - text: Can access reviews be scoped to just one framework instead of the whole account?
+    category: access_management
+    kb_file: null
+- id: no_time_bound_access_grants
+  true_category: access_management
+  description: Role assignments are permanent until manually changed - there's no way to grant access
+    that automatically expires after a set period.
+  symptoms:
+  - text: Can I grant someone Contributor access that automatically expires after 30 days?
+    category: access_management
+    kb_file: null
+- id: audit_log_lacks_login_ip_address
+  true_category: access_management
+  description: The audit log records login events but not the originating IP address.
+  symptoms:
+  - text: Does the audit log record where a login came from, like an IP address?
+    category: access_management
+    kb_file: null
+- id: no_bulk_user_invite
+  true_category: access_management
+  description: Users are invited one at a time - there's no bulk or CSV-based invite flow.
+  symptoms:
+  - text: Can I invite 15 people at once instead of one at a time?
+    category: access_management
+    kb_file: null
+- id: viewer_role_not_scoped_to_single_framework
+  true_category: access_management
+  description: The Viewer role grants read access to the whole account - there's no way to scope it to
+    just one framework, which matters for external viewers like auditors.
+  symptoms:
+  - text: Can we give our auditor Viewer access to just one framework instead of the whole account?
+    category: access_management
+    kb_file: null
+  - text: Can our auditor's access be limited to just the framework they're auditing?
+    category: audits
+    kb_file: null
+- id: concurrent_audits_same_framework_unsupported_workflow
+  true_category: audits
+  description: The platform's audit workflow assumes one active audit per framework at a time - running
+    two audits with two firms in the same cycle isn't a supported flow.
+  symptoms:
+  - text: Can we run two separate SOC 2 audits with two different audit firms in the same year?
+    category: audits
+    kb_file: null
+- id: no_third_party_audit_tool_integration
+  true_category: audits
+  description: There's no native integration for an auditor's own audit-management software - everything
+    happens inside the platform's own auditor view.
+  symptoms:
+  - text: Our auditor wants a native integration with their own audit-management software
+    category: audits
+    kb_file: null
+- id: no_in_platform_evidence_commenting_for_auditors
+  true_category: audits
+  description: Auditors can view and download evidence but can't leave comments on a specific item directly
+    - questions have to go through email instead.
+  symptoms:
+  - text: Can our auditor leave comments directly on a piece of evidence instead of emailing separately?
+    category: audits
+    kb_file: null
+- id: auditor_access_not_revoked_after_engagement
+  true_category: audits
+  description: Auditor access doesn't automatically expire or get revoked when the engagement wraps up
+    - it has to be removed manually.
+  symptoms:
+  - text: Our audit wrapped up months ago and the auditor we invited still has access - is that supposed
+      to happen?
+    category: audits
+    kb_file: null
+- id: no_auditor_review_progress_tracking
+  true_category: audits
+  description: There's no way to see which controls the auditor has actually opened or reviewed versus
+    which are still untouched.
+  symptoms:
+  - text: Is there a way to tell which controls our auditor has actually looked at versus what's still
+      pending?
+    category: audits
+    kb_file: null
+- id: certificate_missing_scope_statement
+  true_category: audits
+  description: The issued certificate doesn't list the specific systems or boundaries that were in scope
+    for the audit.
+  symptoms:
+  - text: The certificate we got doesn't list which systems were actually in scope - our customers are
+      asking for that
+    category: audits
+    kb_file: null
+- id: surveillance_audit_evidence_reuse_unclear
+  true_category: audits
+  description: For a surveillance audit, evidence that hasn't changed since the prior year still needs
+    to be explicitly re-attached - there's no automatic carry-forward.
+  symptoms:
+  - text: For our surveillance audit, do we have to re-upload evidence that hasn't changed since last
+      year?
+    category: audits
+    kb_file: null
+  - text: Does evidence I uploaded last year still count, or do I need to re-upload it?
+    category: evidence
+    kb_file: null
+- id: no_formal_auditor_evidence_request_flow
+  true_category: audits
+  description: Auditors can view what's shared with them but can't formally request a specific piece of
+    evidence in-platform - that still happens over email.
+  symptoms:
+  - text: Our auditor wants to formally request a specific piece of evidence through the platform instead
+      of emailing us
+    category: audits
+    kb_file: null
+- id: no_custom_billing_cycle_alignment
+  true_category: account_billing
+  description: Billing cycles are anchored to the signup date - there's no option to align them to a customer's
+    fiscal year instead.
+  symptoms:
+  - text: Can we get a custom invoice schedule that matches our fiscal year instead of our signup date?
+    category: account_billing
+    kb_file: null
+- id: no_multi_currency_billing_support
+  true_category: account_billing
+  description: All billing is in USD - there's no option to receive invoices in another currency.
+  symptoms:
+  - text: We were charged in USD but our finance team needs invoices in EUR
+    category: account_billing
+    kb_file: null
+- id: seat_proration_policy_unclear
+  true_category: account_billing
+  description: Seats added mid-cycle are prorated, but the proration isn't explained anywhere a customer
+    would see it before adding users.
+  symptoms:
+  - text: If we add 10 users mid-month, are we charged a prorated amount or the full seat price?
+    category: account_billing
+    kb_file: null
+- id: cant_downgrade_below_minimum_framework_count
+  true_category: account_billing
+  description: The plan the customer is on has a two-framework minimum that can't be reduced without changing
+    plans, even if they only need one framework now.
+  symptoms:
+  - text: We only need one framework now but the plan won't let us go below two - is that a hard limit?
+    category: account_billing
+    kb_file: null
+- id: billing_admin_departed_no_successor
+  true_category: account_billing
+  description: The account's sole billing Admin left the company, and payment method changes require Admin
+    access with no built-in transfer or recovery path.
+  symptoms:
+  - text: Our billing admin left the company and nobody else can update the payment method - what do we
+      do?
+    category: account_billing
+    kb_file: null
+- id: no_per_framework_invoice_breakdown
+  true_category: account_billing
+  description: Invoices show a single total - there's no line-item breakdown by framework for customers
+    who need to allocate cost internally.
+  symptoms:
+  - text: Our invoice just shows one total - can we get it broken down by framework so we can allocate
+      costs internally?
+    category: account_billing
+    kb_file: null
+  - text: Can I see how much each of our frameworks is costing us separately?
+    category: frameworks
+    kb_file: null
+- id: trial_removal_deadline_charge_bug
+  true_category: account_billing
+  description: A framework removed just before the 14-day trial window closed was still billed, suggesting
+    the removal and the billing check raced against each other.
+  symptoms:
+  - text: We removed a framework before the 14-day trial ended but got charged for it anyway
+    category: account_billing
+    kb_file: null
+deadline_pressure_messaging:
+  imminent: An audit is imminent or already underway, and this is holding it up - the customer should
+    convey that urgency without using the word 'imminent'.
+  scheduled: An audit is scheduled for some time in the future, mentioned in passing, not framed as an
+    immediate deadline.
+  none: No audit is relevant to this request at all.
+  not_mentioned: Do not mention any audit, deadline, or timeline whatsoever - the customer just describes
+    the problem.

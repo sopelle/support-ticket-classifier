@@ -1,7 +1,9 @@
 # Support Ticket Classifier
 
-An LLM-powered classifier that triages support tickets for a compliance automation platform (classifying each by category, priority, and intent) paired with an
-evaluation harness that measures its own accuracy against a labeled test set.
+An LLM-powered classifier that triages support tickets (category, priority, intent) for whichever
+product a domain pack under `domains/` targets — `domains/compliance/` ships as the default,
+targeting a fictional SOC 2 / ISO 27001 / GDPR compliance automation platform. Paired with an evaluation
+harness that measures its own accuracy against a labeled test set.
 
 **Status:** work in progress.
 
@@ -13,13 +15,17 @@ evaluation harness that measures its own accuracy against a labeled test set.
 
 Set the Claude API key in a `.env` file (see `.env.example`).
 
+Scripts import from `triage`, so run them as modules from the repo root:
+
+    python -m scripts.generate_tickets --dry-run   # inspect corpus shape, no API calls
+    python -m scripts.generate_tickets             # build it (~200 API calls)
+
 ## Architecture
 
 Ports and adapters: the core knows only its own types and never depends on a ticketing platform.
 
-- `triage/` : core. `taxonomy.py` (label enums, single source of truth), `models.py` (`Ticket`, `Classification`), `classifier.py` (`classify(ticket)`)
+- `triage/` : core. `taxonomy.py` (label enums, single source of truth — `Category` is built at import time from the active domain pack; `Priority`/`Intent` are universal and static), `domain.py` (loads the active domain pack: categories, causes, priority rubric, knowledge base — swap domains via the `DOMAIN` env var, not code edits), `models.py` (`Ticket`, `Classification`), `classifier.py` (`classify(ticket)`)
 - `triage/adapters/` : I/O boundaries. Swapping in a real ticketing system means writing a new adapter, not touching the core
-- `triage/prompts/` : prompt source material (rubrics, instructions) as markdown, loaded by the prompt builder rather than inlined as Python strings. Doubles as the human labeling guide for the gold dataset
+- `domains/<name>/` : one product's vocabulary — `taxonomy.yaml` (category list), `priority_rubric.md`, `causes.yaml` (root-cause catalog + domain-flavored messaging), `knowledge_base/*.md`. `domains/compliance/` is the only one today
 - `eval/` : evaluation harness, deliberately outside the core package. Parameterized by dimension (`category`, `priority`, `intent`), not hardcoded to one
 - `scripts/` : entry points (ticket generation, batch runs)
-- `data/knowledge_base/` : the compliance FAQ; grounds ticket generation today, becomes the retrieval source later

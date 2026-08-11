@@ -22,17 +22,17 @@ Set the Claude API key in a `.env` file (see `.env.example`).
 
 Ports and adapters: the core knows only its own types and never depends on a ticketing platform.
 
-- `triage/` : core. `taxonomy.py` (label enums, single source of truth),`models.py` (`Ticket`, `Classification`), `classifier.py` (`classify(ticket)`)
+- `triage/` : core. `taxonomy.py` (label enums, single source of truth — `Category` is built at import time from the active domain pack; `Priority`/`Intent` are universal and static), `domain.py` (loads the active domain pack: categories, causes, priority rubric, knowledge base — swap domains via the `DOMAIN` env var, not code edits), `models.py` (`Ticket`, `Classification`), `classifier.py` (`classify(ticket)`)
 - `triage/adapters/` : I/O boundaries. Swapping in a real ticketing system means writing a new adapter, not touching the core
-- `triage/prompts/` : prompt source material (rubrics, instructions) as markdown, loaded by the prompt builder rather than inlined as Python strings. Doubles as the human labeling guide for the gold dataset
+- `domains/<name>/` : one product's vocabulary — `taxonomy.yaml` (category list), `priority_rubric.md`, `causes.yaml` (root-cause catalog + domain-flavored messaging), `knowledge_base/*.md`. `domains/compliance/` is the only one today
 - `eval/` : evaluation harness, deliberately outside the core package. Parameterized by dimension (`category`, `priority`, `intent`), not hardcoded to one
 - `scripts/` : entry points (ticket generation, batch runs)
-- `data/knowledge_base/` : the compliance FAQ; grounds       ticket generation today, becomes the retrieval source later
 
 Decisions worth not re-litigating:
 
 - Stdlib `dataclasses`, not pydantic. The taxonomy enums already reject invalid labels, and the tool-use JSON schema is written by hand on purpose
-- Prefer the standard library. Add a dependency only when it does something the stdlib genuinely cannot
+- Prefer the standard library. Add a dependency only when it does something the stdlib genuinely cannot (PyYAML for the domain packs is the one exception so far)
+- Domain content (categories, priority rubric, causes, knowledge base, product description) lives in `domains/<name>/`, not Python. Retargeting the classifier to a different product means adding a directory, not editing code
 - Batch-first. Real-time triggering is an adapter concern, not a core concern
 - Structured output via tool use is not MCP; the core calls the API directly
 - `Classification` carries a `reasoning` field, generated before the labels. It is never scored: it exists to make the model reason before deciding, and to make error analysis possible
