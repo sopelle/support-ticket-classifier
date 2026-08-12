@@ -2,8 +2,10 @@
 # Each cause has one or more symptoms - how a customer would describe it, which may
 # point at a different category than the cause's true_category (misleading_symptom
 # scenarios use that gap on purpose). A symptom's kb_file is set only when its text
-# comes verbatim from a knowledge_base/ troubleshooting entry; invented symptoms
-# (no matching article) leave it null.
+# comes verbatim from a knowledge_base/ FAQ or Troubleshooting entry; invented symptoms
+# (no matching article) leave it null. FAQ-derived causes read as a customer asking
+# something the docs already answer, not a bug - the "root cause" is the documented
+# answer itself, not a malfunction.
 causes:
 - id: controls_not_mapped_to_framework
   true_category: frameworks
@@ -249,7 +251,8 @@ causes:
   description: The customer already did equivalent scoping work for a different framework outside the
     platform and wants it to count toward a new framework - it doesn't automatically.
   symptoms:
-  - text: Can we get credit toward SOC 2 for work we already did for ISO 27001 outside your platform?
+  - text: We already did equivalent scoping work for ISO 27001 outside your platform and don't want
+      to redo all of it for SOC 2
     category: frameworks
     kb_file: null
 - id: readiness_score_overstates_actual_coverage
@@ -264,7 +267,8 @@ causes:
   true_category: frameworks
   description: There's no way to preview a framework's control set before formally adding it to the account.
   symptoms:
-  - text: Is there a way to preview what our GDPR control set would look like before adding the framework?
+  - text: We can't see what the GDPR control set actually looks like without committing to adding
+      the framework first
     category: frameworks
     kb_file: null
 - id: framework_removal_leaves_orphaned_evidence
@@ -308,7 +312,8 @@ causes:
   description: A control can only have one assigned owner - there's no way to represent shared responsibility
     across two people.
   symptoms:
-  - text: Can a control have two owners for shared responsibilities?
+  - text: Only one person can be listed as owner on a control, even though responsibility for it
+      is genuinely shared across two of our team members
     category: controls
     kb_file: null
 - id: control_test_result_stale_between_runs
@@ -370,7 +375,8 @@ causes:
   description: Control status can only be changed one control at a time - there's no multi-select bulk
     action.
   symptoms:
-  - text: Is there a way to update the status on multiple controls at once instead of one at a time?
+  - text: Updating status on more than a handful of controls means clicking into each one individually,
+      which ate up an entire afternoon after our last review
     category: controls
     kb_file: null
 - id: control_reassignment_no_notification
@@ -394,7 +400,8 @@ causes:
   description: Evidence has to be uploaded one file at a time, per control - there's no bulk upload path
     for attaching many files across many controls at once.
   symptoms:
-  - text: Can I bulk-upload evidence for 50 controls at once?
+  - text: Uploading evidence one control at a time for 50 controls at once has taken most of the
+      week
     category: evidence
     kb_file: null
 - id: no_evidence_recovery_after_deletion
@@ -472,7 +479,8 @@ causes:
   description: There's no outbound notification when an integration disconnects - customers only find
     out by checking the dashboard.
   symptoms:
-  - text: Can we get a webhook that fires whenever an integration disconnects?
+  - text: We only find out an integration disconnected when someone happens to check the dashboard,
+      sometimes days later
     category: integrations
     kb_file: null
 - id: integration_sync_history_not_visible
@@ -505,8 +513,8 @@ causes:
   description: There's no test or preview mode for connecting an integration - authorizing it starts real
     evidence collection immediately.
   symptoms:
-  - text: Is there a way to test-connect an integration without it immediately starting to collect real
-      evidence?
+  - text: Connecting an integration to test it out started pulling in real evidence immediately, before
+      we were ready for that
     category: integrations
     kb_file: null
 - id: no_multilingual_policy_support
@@ -514,7 +522,7 @@ causes:
   description: Policy templates and custom policies are English-only - there's no built-in translation
     or localization.
   symptoms:
-  - text: Can policies be translated into other languages for our EU staff?
+  - text: Our EU staff are being asked to acknowledge policies that are only available in English
     category: policies
     kb_file: null
 - id: acknowledgment_not_visible_to_managers
@@ -547,8 +555,8 @@ causes:
   description: Policies publish immediately when approved - there's no way to schedule a publish date
     in the future.
   symptoms:
-  - text: Can I schedule a policy to publish automatically on a specific future date instead of publishing
-      it manually?
+  - text: We have to remember to come back and manually publish a policy on the exact date it's
+      supposed to take effect
     category: policies
     kb_file: null
 - id: policy_attachment_size_limit_too_small
@@ -584,7 +592,8 @@ causes:
   description: Roles are limited to Admin, Contributor, and Viewer - there's no way to create a narrower
     custom role, such as one with Contributor access but no billing visibility.
   symptoms:
-  - text: Can we have a role between Contributor and Admin with narrower billing access?
+  - text: The only roles available are Contributor and Admin, and giving someone Admin just to unblock
+      one task also hands them full billing access we didn't want them to have
     category: access_management
     kb_file: null
 - id: shared_login_credentials_no_individual_attribution
@@ -622,7 +631,7 @@ causes:
   true_category: access_management
   description: Users are invited one at a time - there's no bulk or CSV-based invite flow.
   symptoms:
-  - text: Can I invite 15 people at once instead of one at a time?
+  - text: Inviting a new team of 15 people meant sending each invite separately, one at a time
     category: access_management
     kb_file: null
 - id: viewer_role_not_scoped_to_single_framework
@@ -657,7 +666,8 @@ causes:
   description: Auditors can view and download evidence but can't leave comments on a specific item directly
     - questions have to go through email instead.
   symptoms:
-  - text: Can our auditor leave comments directly on a piece of evidence instead of emailing separately?
+  - text: Our auditor has been emailing us questions about specific evidence items separately instead
+      of leaving comments where we can see them in context
     category: audits
     kb_file: null
 - id: auditor_access_not_revoked_after_engagement
@@ -674,8 +684,8 @@ causes:
   description: There's no way to see which controls the auditor has actually opened or reviewed versus
     which are still untouched.
   symptoms:
-  - text: Is there a way to tell which controls our auditor has actually looked at versus what's still
-      pending?
+  - text: We have no visibility into which controls our auditor has actually opened and reviewed
+      versus what's still sitting untouched
     category: audits
     kb_file: null
 - id: certificate_missing_scope_statement
@@ -768,3 +778,183 @@ causes:
   - text: We removed a framework before the 14-day trial ended but got charged for it anyway
     category: account_billing
     kb_file: null
+- id: multi_framework_support_not_surfaced
+  true_category: frameworks
+  description: Running two frameworks at once is fully supported, with shared controls cross-mapped
+    automatically so evidence isn't collected twice, but nothing says so before a customer adds a
+    second framework, so they ask before committing to one.
+  symptoms:
+  - text: Can I run two frameworks at once?
+    category: frameworks
+    kb_file: frameworks.md
+- id: readiness_assessment_purpose_unclear
+  true_category: frameworks
+  description: A readiness assessment scans current control status and evidence coverage against a
+    framework's requirements and flags gaps before an audit formally starts, but how it differs from
+    the audit itself isn't explained anywhere the customer would see before running one.
+  symptoms:
+  - text: What is a readiness assessment?
+    category: frameworks
+    kb_file: frameworks.md
+- id: control_status_meanings_unclear
+  true_category: controls
+  description: A control can be Not Started, In Progress, Complete, or Not Applicable, and what moves
+    it between those states - manual entry versus an automated test result - isn't explained anywhere
+    the owner would see while working the control.
+  symptoms:
+  - text: What are the possible statuses for a control?
+    category: controls
+    kb_file: controls.md
+- id: automated_vs_manual_control_distinction_unclear
+  true_category: controls
+  description: Automated controls are tested by a scheduled integration sync and manual controls are
+    marked by a person uploading evidence directly, but which kind a given control is isn't labeled
+    on the control's own page, so owners ask which applies to what they're looking at.
+  symptoms:
+  - text: What's the difference between automated and manual controls?
+    category: controls
+    kb_file: controls.md
+- id: control_not_applicable_option_undiscoverable
+  true_category: controls
+  description: Controls can be marked Not Applicable to exclude them from readiness scoring when they
+    genuinely don't apply to the account, but the option sits inside a per-control status menu rather
+    than being visible from the controls list, so customers ask whether it's possible at all.
+  symptoms:
+  - text: Can I mark a control as not applicable?
+    category: controls
+    kb_file: controls.md
+- id: evidence_reuse_across_controls_unclear
+  true_category: evidence
+  description: A single piece of evidence can be linked to more than one control and only needs to
+    be uploaded once, but nothing on the upload screen suggests that's possible, so customers ask
+    before uploading the same file repeatedly.
+  symptoms:
+  - text: Can one piece of evidence satisfy multiple controls?
+    category: evidence
+    kb_file: evidence.md
+- id: acceptable_evidence_types_unclear
+  true_category: evidence
+  description: Evidence can be a screenshot, exported report, policy document, or system log - anything
+    that demonstrates a control was performed - but the platform gives no examples near the upload
+    flow, so customers ask what's actually acceptable before gathering files.
+  symptoms:
+  - text: What counts as evidence?
+    category: evidence
+    kb_file: evidence.md
+- id: integration_write_access_concern
+  true_category: integrations
+  description: Every supported integration is read-only - the platform only pulls evidence and never
+    modifies configuration in the connected system - but that scope isn't stated on the OAuth consent
+    screen, so security-conscious customers ask before authorizing.
+  symptoms:
+  - text: Does the platform ever write to my systems?
+    category: integrations
+    kb_file: integrations.md
+- id: evidence_retention_after_disconnect_unclear
+  true_category: integrations
+  description: Evidence already collected stays attached to its controls after an integration is disconnected
+    - only future syncs stop - but the disconnect confirmation dialog doesn't say so, so customers
+    ask before disconnecting out of fear of losing what's already there.
+  symptoms:
+  - text: What happens to evidence collected before I disconnect an integration?
+    category: integrations
+    kb_file: integrations.md
+- id: policy_template_customization_undiscoverable
+  true_category: policies
+  description: Policy templates can be edited freely after being added to an account - wording, sections,
+    and scope are all editable - but the template picker only shows a preview, not an edit affordance,
+    so customers ask whether customization is possible before committing to one.
+  symptoms:
+  - text: Can I customize a policy template?
+    category: policies
+    kb_file: policies.md
+- id: policy_pdf_export_undiscoverable
+  true_category: policies
+  description: Any published policy can be exported as a PDF from its detail page, but the export
+    action is a small icon rather than a labeled button, so customers ask whether it's possible instead
+    of finding it.
+  symptoms:
+  - text: Can I export a policy as a PDF?
+    category: policies
+    kb_file: policies.md
+- id: policy_to_control_mapping_unclear
+  true_category: policies
+  description: Policies are linked to controls manually, one at a time, from the policy's own page
+    - there's no automatic mapping based on policy type - and that's not obvious from the controls
+    list, so customers ask how the connection is supposed to work.
+  symptoms:
+  - text: How are policies mapped to controls?
+    category: policies
+    kb_file: policies.md
+- id: deactivate_vs_delete_user_distinction_unclear
+  true_category: access_management
+  description: Deactivating a user preserves their historical audit-log activity while revoking access,
+    and deleting removes the account entirely; the two actions sit next to each other in the same
+    menu with no explanation of the difference.
+  symptoms:
+  - text: What's the difference between deactivating and deleting a user?
+    category: access_management
+    kb_file: access_management.md
+- id: available_user_roles_unclear
+  true_category: access_management
+  description: The platform ships three roles - Admin, Contributor, and Viewer - each with a fixed
+    permission set, but the differences aren't summarized anywhere in the invite flow, so customers
+    ask what the options actually are before assigning one.
+  symptoms:
+  - text: What user roles exist?
+    category: access_management
+    kb_file: access_management.md
+- id: auditor_selection_process_unclear
+  true_category: audits
+  description: The platform doesn't recommend or vet auditors - customers bring their own firm and
+    just invite them once selected - but nothing on the audits page clarifies that, so customers ask
+    where to find or pick one.
+  symptoms:
+  - text: How do I choose an auditor?
+    category: audits
+    kb_file: audits.md
+- id: auditor_access_scope_unclear
+  true_category: audits
+  description: An invited auditor can see only the controls, evidence, and policies in scope for the
+    framework they're auditing, not the whole account, but that scoping isn't stated anywhere in the
+    invite dialog, so customers ask what the auditor will actually be able to see.
+  symptoms:
+  - text: What access does an auditor get?
+    category: audits
+    kb_file: audits.md
+- id: audit_fieldwork_timeline_unclear
+  true_category: audits
+  description: Fieldwork through report issuance typically takes 2-6 weeks depending on the auditor's
+    own schedule and how quickly evidence requests are answered, but the platform doesn't surface
+    any expected timeline, so customers ask how long to plan for once fieldwork starts.
+  symptoms:
+  - text: How long does an audit take from fieldwork to report?
+    category: audits
+    kb_file: audits.md
+- id: seat_based_billing_model_unclear
+  true_category: account_billing
+  description: Pricing is per active user seat, billed monthly at the plan's per-seat rate, but the
+    pricing page describes plans by framework count rather than seats, so customers ask how seats
+    factor into the price before adding more people.
+  symptoms:
+  - text: Is billing seat-based?
+    category: account_billing
+    kb_file: account_billing.md
+- id: subscription_cancellation_process_unclear
+  true_category: account_billing
+  description: A subscription can be cancelled by a billing Admin from Account Settings, taking effect
+    at the end of the current billing cycle - there's no separate "cancel" flow outside that settings
+    page, so customers ask how to do it rather than finding it.
+  symptoms:
+  - text: How do I cancel my subscription?
+    category: account_billing
+    kb_file: account_billing.md
+- id: billing_management_permission_unclear
+  true_category: account_billing
+  description: Only users with the Admin role can view or change billing details - Contributors and
+    Viewers can't see the billing page at all - but that restriction isn't explained anywhere a non-Admin
+    would see when the page fails to load for them.
+  symptoms:
+  - text: Who can manage billing on my team?
+    category: account_billing
+    kb_file: account_billing.md

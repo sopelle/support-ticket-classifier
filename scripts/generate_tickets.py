@@ -19,7 +19,7 @@ integrations and "control keeps failing" in controls). `misleading_symptom`
 scenarios deliberately use the symptom whose apparent category differs from the
 cause's true category - the tie-break the classifier has to get right.
 
-About a third of scenarios are invented (`documented=False`, no `kb_file`): plausible
+Most scenarios (~58%) are invented (`documented=False`, no `kb_file`): plausible
 problems no knowledge-base article covers. Without them the corpus would just be a
 copy of the FAQ, and retrieval/cause-discovery work downstream would never have to
 handle "not in the docs."
@@ -37,9 +37,11 @@ Imports from `triage`, so run as a module from the repo root:
 """
 
 import argparse
+import hashlib
 import json
 import math
 from collections import Counter
+from collections.abc import Callable
 from dataclasses import asdict, dataclass
 from enum import StrEnum
 from pathlib import Path
@@ -67,6 +69,12 @@ MODEL = "claude-sonnet-5"
 DEV_TOTAL = 60
 TEST_TOTAL = 140
 DEV_SHARE = 0.3  # dev's share of each category's cause pool
+
+# Largest dev/test gap tolerated on an axis that's supposed to be split-independent
+# (see report_split_consistency). Calibrated on observed behavior: legitimate gaps from
+# rotation/rounding run 1-6 points (tone, deadline_pressure, presented_as); the
+# position-correlated phrasing bug this guards against was a 37-point gap.
+MAX_SPLIT_GAP = 0.10
 
 
 def _spread(total: int, n: int) -> list[int]:
@@ -149,9 +157,9 @@ def _load_causes() -> list[Cause]:
 ALL_CAUSES: list[Cause] = _load_causes()
 CAUSES_BY_ID: dict[str, Cause] = {cause.id: cause for cause in ALL_CAUSES}
 
-# The catalog-wide documented share (27/88 causes today). Both splits, and every
+# The catalog-wide documented share (47/108 causes today). Both splits, and every
 # category, target this same figure - a category's own documented:invented ratio
-# varies too much (CONTROLS has 1 documented cause out of 11) to hit reliably by
+# varies too much (CONTROLS has 4 documented causes out of 14) to hit reliably by
 # just preserving whatever ratio its pool happens to have after rounding.
 DOCUMENTED_SHARE = sum(1 for c in ALL_CAUSES if c.symptoms[0].kb_file is not None) / len(ALL_CAUSES)
 
@@ -192,6 +200,14 @@ class Scenario:
     secondary_category: Category | None = None  # only for multi_topic
 
 
+def _split_key(cause: Cause) -> str:
+    """Order causes deterministically but independently of their position in
+    causes.yaml. Slicing the file's own order lets any property that correlates with
+    authoring order - documented vs invented, question vs statement, whatever gets
+    appended next - leak into the dev/test split."""
+    return hashlib.sha256(cause.id.encode()).hexdigest()
+
+
 def split_causes(category: Category) -> tuple[list[Cause], list[Cause]]:
     """Partition a category's causes into disjoint dev/test pools, so no cause - and
     therefore no symptom - crosses splits.
@@ -201,10 +217,15 @@ def split_causes(category: Category) -> tuple[list[Cause], list[Cause]]:
     ratio, and "close" on pools this small (as few as 4 causes) rounds the wrong way
     often enough to matter. Splitting within each stratum first means every prefix -
     not just the whole list - reflects the group's own size.
+
+    Each group is sorted by _split_key, not left in causes.yaml's own order, before
+    being cut - otherwise the cut point is a position in the file, and any authoring
+    pattern (a batch of similarly-phrased causes added together, say) ends up
+    concentrated on one side of the split instead of spread across it.
     """
     pool = [c for c in ALL_CAUSES if c.true_category == category]
-    documented = [c for c in pool if c.symptoms[0].kb_file is not None]
-    invented = [c for c in pool if c.symptoms[0].kb_file is None]
+    documented = sorted((c for c in pool if c.symptoms[0].kb_file is not None), key=_split_key)
+    invented = sorted((c for c in pool if c.symptoms[0].kb_file is None), key=_split_key)
 
     def cut(group: list[Cause]) -> tuple[list[Cause], list[Cause]]:
         n_dev = math.ceil(len(group) * DEV_SHARE)
@@ -420,6 +441,72 @@ def load_existing_ids(path: Path) -> set[str]:
         return {json.loads(line)["id"] for line in f if line.strip()}
 
 
+def report_split_consistency(scenarios: list[Scenario]) -> None:
+    """Check dev vs test on every axis that should be independent of the split, and flag
+    any that isn't. A corpus can look perfectly balanced in aggregate - the FAQ causes
+    added in bulk at the end of causes.yaml gave the catalog a fine 38%/38% documented
+    question-phrasing split - while one split gets nearly all of them and the other
+    almost none, because split_causes used to cut on position in the file. This is the
+    check that would have caught it: it compares splits directly instead of eyeballing
+    catalog-wide shares.
+
+    Leakage (a cause or symptom appearing in both splits) is a broken invariant, not a
+    distribution to report alongside the axes below - it raises immediately.
+    """
+    dev = [s for s in scenarios if s.split == "dev"]
+    test = [s for s in scenarios if s.split == "test"]
+
+    dev_causes = {s.cause for s in dev}
+    test_causes = {s.cause for s in test}
+    leaked_causes = dev_causes & test_causes
+    if leaked_causes:
+        raise SystemExit(
+            f"{len(leaked_causes)} cause(s) present in both splits: {sorted(leaked_causes)}"
+        )
+
+    dev_symptoms = {s.symptom for s in dev}
+    test_symptoms = {s.symptom for s in test}
+    leaked_symptoms = dev_symptoms & test_symptoms
+    if leaked_symptoms:
+        raise SystemExit(
+            f"{len(leaked_symptoms)} symptom(s) present in both splits: {sorted(leaked_symptoms)}"
+        )
+
+    def share(group: list[Scenario], predicate: Callable[[Scenario], bool]) -> float:
+        return sum(1 for s in group if predicate(s)) / len(group)
+
+    axes: list[tuple[str, Callable[[Scenario], bool]]] = [
+        ("documented", lambda s: s.documented),
+        ("question-shaped symptom", lambda s: s.symptom.strip().endswith("?")),
+        ("hard difficulty", lambda s: s.difficulty != Difficulty.PLAIN),
+        ("workaround", lambda s: s.workaround),
+    ]
+    for axis_name, enum_cls in (
+        ("tone", Tone),
+        ("deadline_pressure", DeadlinePressure),
+        ("presented_as", Intent),
+    ):
+        for value in enum_cls:
+            axes.append((f"{axis_name}={value.value}", lambda s, a=axis_name, v=value: getattr(s, a) == v))
+
+    print("\nSplit consistency (dev vs test - these axes shouldn't correlate with split):")
+    skewed = 0
+    for label, predicate in axes:
+        dev_share = share(dev, predicate)
+        test_share = share(test, predicate)
+        gap = abs(dev_share - test_share)
+        flag = "  <-- SKEWED" if gap > MAX_SPLIT_GAP else ""
+        print(f"  {label:32s} dev {dev_share:4.0%}  test {test_share:4.0%}  gap {gap:4.0%}{flag}")
+        if gap > MAX_SPLIT_GAP:
+            skewed += 1
+
+    if skewed:
+        noun = "axis" if skewed == 1 else "axes"
+        print(f"\n{skewed} {noun} skewed beyond {MAX_SPLIT_GAP:.0%}")
+    else:
+        print(f"\nall axes within {MAX_SPLIT_GAP:.0%}")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -450,6 +537,7 @@ def main() -> None:
                 f"  tickets per cause: min={reuse[0]}, max={reuse[-1]}, "
                 f"avg={sum(reuse) / len(reuse):.1f}"
             )
+        report_split_consistency(scenarios)
         return
 
     DEV_PATH.parent.mkdir(parents=True, exist_ok=True)
