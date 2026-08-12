@@ -33,7 +33,8 @@ re-billing completed tickets. generation_log.jsonl records the full Scenario for
 every id, which is what makes the corpus auditable and regenerable.
 
 Imports from `triage`, so run as a module from the repo root:
-    python -m scripts.generate_tickets --dry-run
+    python -m scripts.generate_tickets --dry-run    # inspect corpus shape, no API calls
+    python -m scripts.generate_tickets --limit 8    # smoke-test generation, a few real API calls
 """
 
 import argparse
@@ -551,6 +552,9 @@ def main() -> None:
     load_dotenv()
     client = anthropic.Anthropic()
 
+    successes = 0
+    failures: Counter[str] = Counter()
+
     with (
         DEV_PATH.open("a") as dev_f,
         TEST_PATH.open("a") as test_f,
@@ -560,6 +564,7 @@ def main() -> None:
             try:
                 ticket = generate_ticket(client, scenario)
             except Exception as exc:
+                failures[type(exc).__name__] += 1
                 print(f"[{i}/{len(pending)}] {scenario.id}: FAILED ({exc}) - will retry on next run")
                 continue
             # Log before the ticket: if a crash lands between the two writes, the
@@ -571,7 +576,18 @@ def main() -> None:
             out = dev_f if scenario.split == "dev" else test_f
             out.write(json.dumps(asdict(ticket)) + "\n")
             out.flush()
+            successes += 1
             print(f"[{i}/{len(pending)}] {scenario.id}: {ticket.subject}")
+
+    on_disk = len(existing_ids) + successes
+    print(f"\nGenerated {successes} this run - {on_disk}/{len(scenarios)} tickets on disk.")
+
+    if failures:
+        breakdown = ", ".join(f"{n}x {name}" for name, n in failures.most_common())
+        print(
+            f"{sum(failures.values())} failed ({breakdown}). Re-run to retry; finished "
+            "tickets are skipped."
+        )
 
 
 if __name__ == "__main__":

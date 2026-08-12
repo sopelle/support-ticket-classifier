@@ -17,8 +17,17 @@ Set the Claude API key in a `.env` file (see `.env.example`).
 
 Scripts import from `triage`, so run them as modules from the repo root:
 
-    python -m scripts.generate_tickets --dry-run   # inspect corpus shape, no API calls
-    python -m scripts.generate_tickets             # build it (~200 API calls)
+    python -m scripts.generate_tickets --dry-run    # inspect corpus shape, no API calls
+    python -m scripts.generate_tickets --limit 8    # smoke-test generation, a few real API calls
+
+Read the 8 tickets it wrote before doing a full run. Generation resumes from whatever's
+already on disk (already-generated ids are skipped), so if the prompt needs a fix, delete
+this batch before rerunning — otherwise the corpus ends up mixing tickets written under the
+old prompt with ones written under the new one:
+
+    rm -rf data/compliance
+
+    python -m scripts.generate_tickets              # build it (~200 API calls)
 
 ## Architecture
 
