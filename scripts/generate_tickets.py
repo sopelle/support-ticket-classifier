@@ -111,6 +111,7 @@ class Difficulty(StrEnum):
     MISLEADING_SYMPTOM = "misleading_symptom"
     WORKING_AS_DESIGNED = "working_as_designed"
     MISSING_DECIDING_FACT = "missing_deciding_fact"
+    CAUSE_UNDETERMINABLE = "cause_undeterminable"
 
 
 @dataclass(frozen=True)
@@ -221,8 +222,15 @@ def build_scenarios() -> list[Scenario]:
         Difficulty.MISLEADING_SYMPTOM,
         Difficulty.WORKING_AS_DESIGNED,
         Difficulty.MISSING_DECIDING_FACT,
+        Difficulty.CAUSE_UNDETERMINABLE,
     ]
     scenarios: list[Scenario] = []
+    # Indexed by split, not reset per category: at ~17-20 tickets per category, a
+    # per-category (i // 4) % len(hard_types) reset never reaches later hard_types
+    # once there are more hard types than a single category has slots for. Carrying
+    # the rotation across categories still gives every hard type - including the one
+    # a given category runs out of room for - somewhere in the split.
+    hard_counts = {"dev": 0, "test": 0}
 
     for category in categories:
         dev_pool, test_pool = split_causes(category)
@@ -233,7 +241,8 @@ def build_scenarios() -> list[Scenario]:
                 cause = assigned[i]
 
                 if i % 4 == 3:
-                    difficulty = hard_types[(i // 4) % len(hard_types)]
+                    difficulty = hard_types[hard_counts[split] % len(hard_types)]
+                    hard_counts[split] += 1
                 else:
                     difficulty = Difficulty.PLAIN
                 if difficulty == Difficulty.MISLEADING_SYMPTOM:
@@ -352,6 +361,14 @@ def render_prompt(scenario: Scenario) -> str:
             "The customer believes this is a bug and is reporting it as one, even though the "
             "root cause above shows the product is behaving correctly. Write it fully from "
             "their mistaken point of view."
+        )
+    elif scenario.difficulty == Difficulty.CAUSE_UNDETERMINABLE:
+        lines.append(
+            "Describe this the way someone would when they have no diagnostic details to offer - "
+            "no error message, no timestamp, no mention of what changed beforehand, no attempt to "
+            "guess a cause. What they do say should still make the topic, urgency, and what they "
+            "want clear; only the specific root cause should stay genuinely unrecoverable from the "
+            "text."
         )
 
     return "\n".join(lines)
