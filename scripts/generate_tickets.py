@@ -42,10 +42,11 @@ import hashlib
 import json
 import math
 from collections import Counter
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 from dataclasses import asdict, dataclass
 from enum import StrEnum
 from pathlib import Path
+from typing import TypeVar
 
 import anthropic
 from dotenv import load_dotenv
@@ -209,6 +210,18 @@ def _split_key(cause: Cause) -> str:
     return hashlib.sha256(cause.id.encode()).hexdigest()
 
 
+T = TypeVar("T")
+
+
+def _axis_choice(scenario_id: str, axis: str, values: Sequence[T]) -> T:
+    """Pick a value per axis from its own digest. Indexing every axis by the loop
+    counter ties them together whenever their cardinalities share a factor - with four
+    tones, four deadline levels and four intents, `i % 4` makes all three the same
+    choice."""
+    digest = hashlib.sha256(f"{scenario_id}:{axis}".encode()).hexdigest()
+    return values[int(digest, 16) % len(values)]
+
+
 def split_causes(category: Category) -> tuple[list[Cause], list[Cause]]:
     """Partition a category's causes into disjoint dev/test pools, so no cause - and
     therefore no symptom - crosses splits.
@@ -261,6 +274,7 @@ def build_scenarios() -> list[Scenario]:
             assigned = allocate_causes(pool, counts[category])
             for i in range(counts[category]):
                 cause = assigned[i]
+                scenario_id = f"{split}-{category.value}-{i:03d}"
 
                 if i % 4 == 3:
                     difficulty = hard_types[hard_counts[split] % len(hard_types)]
@@ -279,7 +293,9 @@ def build_scenarios() -> list[Scenario]:
 
                 symptom = cause.symptoms[1] if difficulty == Difficulty.MISLEADING_SYMPTOM else cause.symptoms[0]
 
-                deadline_pressure = list(DeadlinePressure)[i % len(DeadlinePressure)]
+                deadline_pressure = _axis_choice(
+                    scenario_id, "deadline_pressure", list(DeadlinePressure)
+                )
                 if difficulty == Difficulty.MISSING_DECIDING_FACT:
                     deadline_pressure = DeadlinePressure.NOT_MENTIONED
 
@@ -289,15 +305,15 @@ def build_scenarios() -> list[Scenario]:
                     offset = 1 + (i // 4) % (len(categories) - 1)
                     secondary_category = categories[(idx + offset) % len(categories)]
 
-                presented_as = list(Intent)[i % len(Intent)]
+                presented_as = _axis_choice(scenario_id, "presented_as", list(Intent))
                 if difficulty == Difficulty.WORKING_AS_DESIGNED:
                     # The prompt tells the writer the customer is reporting a bug; a
-                    # rotated presented_as of question/feature_request would contradict it.
+                    # hashed presented_as of question/feature_request would contradict it.
                     presented_as = Intent.BUG
 
                 scenarios.append(
                     Scenario(
-                        id=f"{split}-{category.value}-{i:03d}",
+                        id=scenario_id,
                         split=split,
                         symptom=symptom.text,
                         cause=cause.id,
@@ -305,8 +321,8 @@ def build_scenarios() -> list[Scenario]:
                         documented=cause.symptoms[0].kb_file is not None,  # the cause's own status
                         kb_file=symptom.kb_file,  # still the chosen symptom's source
                         deadline_pressure=deadline_pressure,
-                        workaround=bool(i % 2),
-                        tone=list(Tone)[i % len(Tone)],
+                        workaround=_axis_choice(scenario_id, "workaround", [False, True]),
+                        tone=_axis_choice(scenario_id, "tone", list(Tone)),
                         presented_as=presented_as,
                         difficulty=difficulty,
                         secondary_category=secondary_category,
@@ -342,8 +358,27 @@ def render_prompt(scenario: Scenario) -> str:
         f"How the customer would describe what they're seeing: {scenario.symptom}",
         "",
         f"How the customer is framing this request: {scenario.presented_as.value.replace('_', ' ')}",
-        f"Customer's tone: {scenario.tone.value.replace('_', ' ')}",
     ]
+
+    if scenario.presented_as == Intent.QUESTION:
+        lines.append(
+            "They want information: how something works, or whether something is expected. "
+            "They are not reporting a fault."
+        )
+    elif scenario.presented_as == Intent.BUG:
+        lines.append("They believe something is broken and want it fixed.")
+    elif scenario.presented_as == Intent.FEATURE_REQUEST:
+        lines.append(
+            "They know the product doesn't do this and are asking for it to be built, not "
+            "asking how to do it."
+        )
+    elif scenario.presented_as == Intent.ACTION_REQUEST:
+        lines.append(
+            "They want the team to do something on their account. They know what they want; "
+            "they need someone to action it."
+        )
+
+    lines.append(f"Customer's tone: {scenario.tone.value.replace('_', ' ')}")
 
     if scenario.tone == Tone.FRUSTRATED:
         lines.append("They're annoyed - this has cost them time or made them look bad.")

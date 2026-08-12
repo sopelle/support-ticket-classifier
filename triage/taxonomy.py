@@ -7,7 +7,7 @@ predictions against gold labels) import them from here.
 Category is domain-dependent - it's built at import time from the active domain's
 taxonomy.yaml (see triage/domain.py), so retargeting the classifier to a different
 product doesn't touch this file. Priority and Intent are universal: every domain
-triages by the same urgency levels and the same five requester intents.
+triages by the same urgency levels and the same four requester intents.
 """
 
 from enum import StrEnum
@@ -32,5 +32,5 @@ class Intent(StrEnum):
     QUESTION = "question"                # how-to / clarification
     BUG = "bug"                          # something is broken
     FEATURE_REQUEST = "feature_request"  # asking for new functionality
-    BILLING_REQUEST = "billing_request"  # account or billing action
-    COMPLAINT = "complaint"              # dissatisfaction
+    ACTION_REQUEST = "action_request"    # asking the team to act on the account - billing changes,
+                                          # cancellations, resets, and the like

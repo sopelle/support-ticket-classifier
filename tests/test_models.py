@@ -31,6 +31,7 @@ def test_classification_accepts_raw_strings_that_match_taxonomy():
         ("category", "not_a_category"),
         ("priority", "urgent"),
         ("intent", "rant"),
+        ("intent", "complaint"),  # valid before issue #28 folded it into tone
     ],
 )
 def test_classification_rejects_labels_outside_taxonomy(field, bad_value):
