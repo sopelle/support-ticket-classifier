@@ -11,8 +11,10 @@ Re-running merges rather than overwriting: a row with anything human recorded on
 `priority`, `intent`, `notes`, or a `category` corrected away from what's freshly
 derived - is preserved exactly. An edit to `priority_derived` alone is not on that list
 and is overwritten on the next run. A row with none of that yet is untouched and gets
-rewritten from scratch, so a fix to primary_category or derive_priority reaches every
-ticket nobody has gotten to yet instead of only new ones. See _is_untouched.
+rewritten from scratch, so a fix to derive_priority reaches every ticket nobody has
+gotten to yet instead of only new ones. A fix to primary_category does not: a row whose
+derived category has moved looks, to _is_untouched, exactly like a human correction, so
+it's preserved with its old category instead of refreshed. See _is_untouched.
 
 Run as a module from the repo root:
     python -m scripts.build_label_sheet dev
