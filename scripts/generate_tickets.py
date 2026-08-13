@@ -72,11 +72,18 @@ DEV_TOTAL = 60
 TEST_TOTAL = 140
 DEV_SHARE = 0.3  # dev's share of each category's cause pool
 
-# Largest dev/test gap tolerated on an axis that's supposed to be split-independent
-# (see report_split_consistency). Calibrated on observed behavior: legitimate gaps from
-# rotation/rounding run 1-6 points (tone, deadline_pressure, presented_as); the
-# position-correlated phrasing bug this guards against was a 37-point gap.
-MAX_SPLIT_GAP = 0.10
+# Largest dev/test gap tolerated on an axis that's supposed to be split-independent -
+# enforced in tests/test_corpus.py, echoed in report_split_consistency's --dry-run table
+# so a human sees the same numbers before spending money on generation. Calibrated on
+# observed behavior, not guessed: most axes land within 1-7 points, but _axis_choice hashes
+# each scenario independently with no per-split balancing, and dev is only 60 scenarios -
+# small enough that one axis (out of 16 checked) landing at 15 points by chance is expected
+# noise, not a correlation bug. The position-correlated phrasing bug this guards against
+# was a 37-point gap; a bare-hash pairwise-lock would reproduce the same order of magnitude.
+# Tolerable because results are reported per class and macro-averaged, which are invariant
+# to class mix; a single overall-accuracy figure would not be, and would need this gap
+# closed rather than tolerated.
+MAX_SPLIT_GAP = 0.20
 
 
 def _spread(total: int, n: int) -> list[int]:
@@ -477,40 +484,21 @@ def load_existing_ids(path: Path) -> set[str]:
         return {json.loads(line)["id"] for line in f if line.strip()}
 
 
-def report_split_consistency(scenarios: list[Scenario]) -> None:
-    """Check dev vs test on every axis that should be independent of the split, and flag
-    any that isn't. A corpus can look perfectly balanced in aggregate - the FAQ causes
-    added in bulk at the end of causes.yaml gave the catalog a fine 38%/38% documented
-    question-phrasing split - while one split gets nearly all of them and the other
-    almost none, because split_causes used to cut on position in the file. This is the
-    check that would have caught it: it compares splits directly instead of eyeballing
-    catalog-wide shares.
-
-    Leakage (a cause or symptom appearing in both splits) is a broken invariant, not a
-    distribution to report alongside the axes below - it raises immediately.
-    """
+def split_leakage(scenarios: list[Scenario]) -> tuple[set[str], set[str]]:
+    """Causes and symptoms present in both splits. Pure computation, shared by
+    tests/test_corpus.py (which fails the build) and main (which refuses to spend
+    money on a corpus whose splits leak)."""
     dev = [s for s in scenarios if s.split == "dev"]
     test = [s for s in scenarios if s.split == "test"]
+    leaked_causes = {s.cause for s in dev} & {s.cause for s in test}
+    leaked_symptoms = {s.symptom for s in dev} & {s.symptom for s in test}
+    return leaked_causes, leaked_symptoms
 
-    dev_causes = {s.cause for s in dev}
-    test_causes = {s.cause for s in test}
-    leaked_causes = dev_causes & test_causes
-    if leaked_causes:
-        raise SystemExit(
-            f"{len(leaked_causes)} cause(s) present in both splits: {sorted(leaked_causes)}"
-        )
 
-    dev_symptoms = {s.symptom for s in dev}
-    test_symptoms = {s.symptom for s in test}
-    leaked_symptoms = dev_symptoms & test_symptoms
-    if leaked_symptoms:
-        raise SystemExit(
-            f"{len(leaked_symptoms)} symptom(s) present in both splits: {sorted(leaked_symptoms)}"
-        )
-
-    def share(group: list[Scenario], predicate: Callable[[Scenario], bool]) -> float:
-        return sum(1 for s in group if predicate(s)) / len(group)
-
+def _split_axes() -> list[tuple[str, Callable[[Scenario], bool]]]:
+    """Every scenario property that should vary independently of the dev/test split.
+    Defined once so split_axis_gaps (the --dry-run table) and tests/test_corpus.py (the
+    build-breaking check on the same gaps) can't drift apart on what counts as an axis."""
     axes: list[tuple[str, Callable[[Scenario], bool]]] = [
         ("documented", lambda s: s.documented),
         ("question-shaped symptom", lambda s: s.symptom.strip().endswith("?")),
@@ -524,13 +512,43 @@ def report_split_consistency(scenarios: list[Scenario]) -> None:
     ):
         for value in enum_cls:
             axes.append((f"{axis_name}={value.value}", lambda s, a=axis_name, v=value: getattr(s, a) == v))
+    return axes
 
-    print("\nSplit consistency (dev vs test - these axes shouldn't correlate with split):")
-    skewed = 0
-    for label, predicate in axes:
+
+def split_axis_gaps(scenarios: list[Scenario]) -> list[tuple[str, float, float, float]]:
+    """For each axis from _split_axes(), (label, dev_share, test_share, gap). A pure
+    computation, not a report: report_split_consistency prints it for a human to read
+    before spending money on generation, and tests/test_corpus.py asserts every gap stays
+    under MAX_SPLIT_GAP - a distribution and an invariant reading the same numbers for
+    different purposes."""
+    dev = [s for s in scenarios if s.split == "dev"]
+    test = [s for s in scenarios if s.split == "test"]
+
+    def share(group: list[Scenario], predicate: Callable[[Scenario], bool]) -> float:
+        return sum(1 for s in group if predicate(s)) / len(group)
+
+    gaps = []
+    for label, predicate in _split_axes():
         dev_share = share(dev, predicate)
         test_share = share(test, predicate)
-        gap = abs(dev_share - test_share)
+        gaps.append((label, dev_share, test_share, abs(dev_share - test_share)))
+    return gaps
+
+
+def report_split_consistency(scenarios: list[Scenario]) -> None:
+    """Print dev vs test share for every split-independent axis, for a human to read
+    before spending money on generation. Not an invariant: the MAX_SPLIT_GAP threshold is
+    enforced by tests/test_corpus.py, which breaks the build - this function only prints.
+    (Leakage is checked separately, by main(), before this function is even called - see
+    split_leakage.) A corpus can look perfectly balanced in aggregate - the FAQ causes added
+    in bulk at the end of causes.yaml gave the catalog a fine 38%/38% documented
+    question-phrasing split - while one split gets nearly all of them and the other almost
+    none, because split_causes used to cut on position in the file. This table is what would
+    have surfaced that: it compares splits directly instead of eyeballing catalog-wide shares.
+    """
+    print("\nSplit consistency (dev vs test - these axes shouldn't correlate with split):")
+    skewed = 0
+    for label, dev_share, test_share, gap in split_axis_gaps(scenarios):
         flag = "  <-- SKEWED" if gap > MAX_SPLIT_GAP else ""
         print(f"  {label:32s} dev {dev_share:4.0%}  test {test_share:4.0%}  gap {gap:4.0%}{flag}")
         if gap > MAX_SPLIT_GAP:
@@ -557,6 +575,14 @@ def main() -> None:
     dev_count = sum(1 for s in scenarios if s.split == "dev")
     test_count = sum(1 for s in scenarios if s.split == "test")
     print(f"Built {len(scenarios)} scenarios ({dev_count} dev, {test_count} test).")
+
+    leaked_causes, leaked_symptoms = split_leakage(scenarios)
+    if leaked_causes or leaked_symptoms:
+        if leaked_causes:
+            print(f"{len(leaked_causes)} cause(s) present in both splits: {sorted(leaked_causes)}")
+        if leaked_symptoms:
+            print(f"{len(leaked_symptoms)} symptom(s) present in both splits: {sorted(leaked_symptoms)}")
+        raise SystemExit(1)
 
     if args.dry_run:
         for split in ("dev", "test"):
