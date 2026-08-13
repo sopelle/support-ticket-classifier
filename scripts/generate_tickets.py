@@ -353,6 +353,8 @@ way real, differently-technical people write tickets.
 - Never mention or hint at internal generation concepts (category, priority, intent, \
 difficulty, "scenario", "cause", deadline pressure as a labeled field, etc.) - those are not \
 things a real customer would write.
+- Sign off with a plausible first name, or with no name at all - never a bracketed \
+placeholder.
 
 Submit the ticket with the submit_ticket tool: a subject line and a body, exactly as the \
 customer would type them.""".format(product_description=domain.load_product_description())
