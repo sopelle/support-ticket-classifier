@@ -26,7 +26,7 @@ Ports and adapters: the core knows only its own types and never depends on a tic
 - `triage/adapters/` : I/O boundaries. Swapping in a real ticketing system means writing a new adapter, not touching the core
 - `domains/<name>/` : one product's vocabulary — `domain.yaml` (product description, deadline-pressure messaging), `taxonomy.yaml` (category list), `causes.yaml` (root-cause catalog), `priority_rubric.md`, `knowledge_base/*.md`. Each file holds exactly what its name says, nothing else. `domains/compliance/` is the only one today
 - `eval/` : evaluation harness, deliberately outside the core package. Parameterized by dimension (`category`, `priority`, `intent`), not hardcoded to one
-- `scripts/` : entry points (ticket generation, batch runs)
+- `scripts/` : entry points. `generate_tickets.py` (corpus generation), `build_label_sheet.py` / `import_labels.py` (hand-labeling workflow, issue #5)
 
 Decisions worth not re-litigating:
 

@@ -198,7 +198,10 @@ class Scenario:
     split: str
     symptom: str
     cause: str
-    primary_category: Category
+    primary_category: Category  # the chosen symptom's category, not the cause's true_category -
+    # triage classifies what a ticket is about, and at intake the cause is unknown. Equal to the
+    # cause's true_category for every difficulty except misleading_symptom, which exists precisely
+    # to pick a symptom whose apparent category differs from where the cause actually lives.
     documented: bool
     kb_file: str | None
     deadline_pressure: DeadlinePressure
@@ -324,7 +327,7 @@ def build_scenarios() -> list[Scenario]:
                         split=split,
                         symptom=symptom.text,
                         cause=cause.id,
-                        primary_category=category,
+                        primary_category=symptom.category,
                         documented=cause.symptoms[0].kb_file is not None,  # the cause's own status
                         kb_file=symptom.kb_file,  # still the chosen symptom's source
                         deadline_pressure=deadline_pressure,

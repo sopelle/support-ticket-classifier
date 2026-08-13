@@ -1,0 +1,480 @@
+id,subject,body,category,priority_derived,priority,intent,notes
+dev-frameworks-000,Readiness assessment not working / unclear what it is,"I ran a ""readiness assessment"" from the dashboard because I saw the option and figured it was part of getting ready for our audit (we have one scheduled later this year). But now I'm confused about what actually happened - it flagged a bunch of gaps in our controls and evidence, but I don't know if this was actually the audit or just some kind of check.
+
+Is this a bug? It doesn't seem to match what I expected an audit process to look like, and there's no explanation anywhere telling me what a ""readiness assessment"" is supposed to do versus an actual audit. I can't move forward because I don't know if I'm supposed to fix these flagged items now or if this is a separate thing entirely from the real audit process.
+
+Can someone clarify what's going on here and fix whatever is causing this confusion? I'm stuck until I understand what step I'm actually on.",frameworks,medium,,,
+dev-frameworks-001,Feature request: control list needs to actually update when scope changes,"I need this built because right now it's just not working the way it should. I changed the scope on one of our frameworks and the control list did NOT update to reflect that change - it's still showing the old set of controls like nothing happened.
+
+This is a basic thing the platform should be able to do. When I change scope, the control list needs to regenerate and show the correct controls immediately, not just sit there stale. I shouldn't have to guess whether my change actually took effect or go dig around trying to force it to refresh.
+
+I've already had this make me look bad in front of my team because I told them the scope update was done and then the controls didn't match what I said. There's no way for me to work around this on my end - I've tried saving again, logging out/in, checking different views, nothing changes it. I'm just stuck until this is fixed.
+
+Please add real functionality so that control lists actually reflect scope changes right after they're made. This is pretty frustrating for something that feels like it should be core functionality.",frameworks,high,,,
+dev-frameworks-002,URGENT - Need a readiness assessment feature before our audit,"We have an audit coming up in a couple months and I really need to know where we stand before it starts, but I can't find anything in the platform that tells me what a ""readiness assessment"" even is or how to run one. Can you add a feature that checks our current controls and evidence against the framework requirements and flags any gaps BEFORE the actual audit kicks off?
+
+This is urgent - I'm currently completely blocked on figuring out where our gaps are and I don't have any way to check this myself right now. We need something that scans our status and tells us what's missing so we're not caught off guard when the audit starts.
+
+Please let me know ASAP if this is something you can build or if there's a fast timeline for it, since we're on a clock here.",frameworks,high,,,
+dev-frameworks-003,Scoping wizard only allows ONE legal entity - we have 3 subsidiaries,"Hi,
+
+We're setting up our framework scoping and hit a wall - the wizard only lets us select a single legal entity, but our organization has three subsidiaries that all need to be included in this framework. There's no option to add additional entities or combine them in any way. Is this a bug, or is the tool genuinely not built to handle a company with more than one legal entity? Because if it's the latter, that's a pretty major gap for a compliance platform.
+
+I can technically work around this by manually tracking scope for each subsidiary outside the tool, but that defeats the whole purpose of paying for this platform, and it's a lot of extra manual effort for our team. We have an audit coming up later this year and I'd really rather not be stitching together spreadsheets to cover for something the software should just handle.
+
+Honestly, this is becoming a bigger issue for us. We've had a few hiccups already and this one is making us seriously question whether this platform can actually support a multi-entity org structure at all. My leadership is asking about alternatives at this point, so I'd appreciate a real answer on whether/when this will be fixed.
+
+Separately, while I have you - we're also struggling with implementing and tracking the actual controls once they're scoped. It's not clear how to assign ownership, track completion status over time, or get a clear view of which controls are still open vs. done. If there's documentation or a better workflow for that, please point me to it, because right now we're piecing it together manually too.
+
+Would appreciate a prompt response on both of these, especially the entity scoping issue.
+
+Thanks,
+Priya",frameworks,high,,,
+dev-frameworks-004,URGENT: Need to see exact changes between old and new framework version,"Hi,
+
+We just went through a migration to the new version of one of our framework standards, and I need to know exactly what changed between the old version and the new one - which controls were added, removed, or modified.
+
+Is there a diff or comparison view somewhere in the platform that shows this side by side? I looked around but couldn't find anything like that.
+
+I need this pretty urgently - our auditor is going through our framework right now and is asking us to confirm what changed since the last version, and I don't have a good answer for them yet. If there's no built-in way to compare versions, can someone at least tell me if I'm missing something, or if I need to manually go control by control and compare the two lists myself? I can do it manually if that's the only option, but with the audit happening right now I really need to know ASAP so I can get moving on it one way or another.
+
+Thanks,",frameworks,high,,,
+dev-frameworks-005,URGENT: Evidence orphaned after removing a framework - need fix before audit,"We removed a framework from our account earlier today and now we have a bunch of evidence items that are no longer attached to any controls. When I go into the evidence library, these items just show up with nothing linked to them at all.
+
+This is a problem because our audit kicks off very soon and our auditor is expecting to see this evidence tied to specific controls. Right now it's just floating with nowhere to go, which makes it look like it's missing or unaccounted for.
+
+I know I could probably go through and manually re-attach each piece of evidence to the right controls one by one, but with the number of items affected that's going to take way too long and I don't have time to do that before the audit starts.
+
+Can someone on your team either restore the links automatically or tell me the fastest way to get this evidence reattached to the correct controls? We need this resolved ASAP - this is actively holding up our audit prep.
+
+Please treat this as urgent. Let me know what you need from me to get this sorted quickly.",frameworks,high,,,
+dev-frameworks-006,Scoping wizard only allows one legal entity - need this fixed,"We have three subsidiaries that all fall under this framework, but when I go through the scoping wizard it only lets me select a single legal entity. There's no option to add the other subsidiaries or scope them together/separately - it just forces everything onto one entity, which isn't accurate for our structure.
+
+This is a complete blocker for us right now. I can't move forward with scoping at all until this is addressed, and I really need someone to actually fix this on our account rather than just explain why it's happening.
+
+Honestly, this is a pretty basic requirement for a company with any kind of corporate structure, and I'm surprised it's not supported. We're actively discussing whether this platform can even support our setup going forward, and I've been asked to bring this up with our leadership as a serious concern if it's not resolved. Please escalate this - we need a real fix, not a workaround, since there isn't one.
+
+Let me know what you need from us to get this moving.",frameworks,high,,,
+dev-frameworks-007,No way to see what changed after framework migration,"Hi,
+
+We recently went through a migration to the new version of one of our framework standards, and I'm trying to find a diff or comparison view that shows exactly what changed between the old version and the new one. I can't find anything like that in the platform - I checked the framework page and the version history but there's no side-by-side or highlighted changes anywhere.
+
+Is this a bug or is the feature just missing? We need to know specifically which controls/requirements were added, removed, or modified so we can update our internal documentation and make sure nothing was missed. Right now the only way I can figure out what changed is to manually go through both versions line by line and compare them myself, which is really time consuming and error prone for a framework this size.
+
+Can you fix this or point me to where this comparison view is supposed to be? Thanks.",frameworks,low,,,
+dev-controls-000,URGENT - need to know what the control statuses mean,"Hi,
+
+I need an answer on this pretty quickly please - I'm stuck and can't move forward with updating my controls.
+
+Can someone tell me exactly what the possible statuses are for a control? I see things like Not Started, In Progress, Complete, and Not Applicable, but I don't understand what determines which one shows up. Sometimes it seems to change on its own and I'm not sure if I'm supposed to be setting it manually or if something else updates it.
+
+I need to know this today if possible since I'm blocked on getting my controls in the right state. Please advise ASAP.
+
+Thanks",controls,high,,,
+dev-controls-001,URGENT: Control owner assignment not saving,"Hi,
+
+I need help with this ASAP. I'm trying to assign an owner to several controls in our workspace and it just isn't saving. I select the person from the dropdown, click save/confirm, everything looks fine, but when I go back into the control the owner field is blank again. I've tried this on multiple controls and it happens every time with this particular person.
+
+I've tried refreshing, logging out and back in, different browsers - nothing works. There's no error message, it just silently doesn't stick.
+
+This is blocking me completely right now, I have no way to work around it. We also have an audit coming up in a couple months so I need our control ownership to be accurate and up to date well before then.
+
+Can someone please look into this urgently and let me know what's going on? Happy to hop on a call if that's faster.
+
+Thanks",controls,high,,,
+dev-controls-002,What are the actual possible statuses for a control? Need this answered ASAP,"Our auditor is scheduled to start review this week and I need a straight answer on this before I lose any more time.
+
+I keep seeing controls sitting in different statuses (Not Started, In Progress, Complete, Not Applicable) and I genuinely can't tell what the full list is or what determines which one a control shows. Some controls I manually marked as Complete flipped back or never moved, and others I never touched show as In Progress. I have no idea what's driving this - is it something I'm supposed to set myself, or is something in the system changing it automatically? There's nothing in the control view that explains it.
+
+I have controls I need to finalize status on right now for the audit and I can't move forward confidently because I don't understand what these statuses actually mean or how they're supposed to work. This is blocking me completely - I don't have a workaround.
+
+Can someone please explain, clearly, the full list of possible statuses and what triggers a control to move between them? If this isn't documented anywhere the control owner would actually see while working, that's a real problem on your end, and I'll need to raise this with my team as we're currently re-evaluating whether this platform is going to work for us long-term. I need this resolved today if at all possible given the audit timing.",controls,high,,,
+dev-controls-003,20 controls marked complete without any way to see who did it or undo it - this is a serious problem,"We just discovered that 20 of our controls got marked as ""Complete"" and nobody on our team can figure out who did it or when. There's no log entry, no attribution, nothing - just a bulk status change that appeared out of nowhere.
+
+This is a huge issue for us. These controls are NOT actually complete, and now our compliance status is showing false information. I need to be able to:
+1. See exactly who changed the status on each of these controls
+2. Revert all 20 back to their previous status in one action, not one by one
+
+Right now I'm stuck manually going through each control to fix the status, which is incredibly time consuming and doesn't even solve the real problem - we still have zero visibility into who made this change or why. If someone on our team did this by accident, we need to know so it doesn't happen again. If it wasn't one of us, that's even more concerning.
+
+We have an audit coming up in a few months and I cannot have unreliable audit trail data going into that. Honestly this makes me question whether the platform can be trusted for compliance tracking at all. We're now discussing internally whether we need to look at other tools, and I plan to raise this with leadership if it's not resolved quickly.
+
+Please treat this as urgent - we are blocked until this is fixed. I need a way to see the change history for these controls and a bulk undo option immediately.",controls,high,,,
+dev-controls-004,Question about control status timing,"Hi,
+
+I noticed one of our automated controls shows as ""Passing"" from a test that ran last night, but the actual process it's monitoring failed this morning. The dashboard still shows a green/passing status even though I know for a fact the underlying process is currently broken.
+
+Can you explain how the status update timing works here? Is the control status only refreshed when the next scheduled test runs, or should it be catching failures in between test runs somehow?
+
+I want to make sure I understand whether this is expected behavior before I rely on the dashboard status for anything else. Right now I don't have a way to force a re-check or get an updated status outside of waiting for the next scheduled run, so any clarification would help.
+
+Thanks",controls,medium,,,
+dev-controls-005,Need ability to link controls as dependent/blocked - blocking our audit prep,"We need the ability to mark a control as blocked by or dependent on another control so that relationship actually shows up on the record. Right now every control just sits there as its own isolated item with zero way to indicate ""this can't be completed until that other one is done.""
+
+This is a real problem for us right now - our auditor is already asking questions about how certain controls relate to each other and why some are incomplete, and I have no way to show that one is literally blocked by another. I'm stuck explaining this manually in emails and spreadsheets instead of just being able to point to the tool and show the dependency.
+
+This isn't a ""how do I do this"" question - I know the feature doesn't exist. I'm asking for it to be built because right now there's no workaround and it's making us look disorganized to our auditor at the worst possible time. Please prioritize adding dependency/blocking relationships between controls.",controls,high,,,
+dev-controls-006,20 controls marked complete by accident - no audit trail and no bulk undo,"Somehow 20 of our controls got marked as ""Complete"" all at once and none of them should be. This is a mess because we have our audit coming up in a few months and now the status of a huge chunk of our controls is wrong.
+
+I went looking for who did this so I could figure out what happened, but there's no log or record showing who changed the status on these controls. It's like they just flipped on their own. That alone is a problem - if I can't see who made a bulk change, how am I supposed to trust the audit trail on anything else?
+
+On top of that, there's no way to undo this in bulk. I have to go through each of the 20 controls one by one and manually revert the status back to what it was before. That's incredibly time consuming and honestly shouldn't be necessary - if the system can change 20 things at once, it should be able to undo 20 things at once too.
+
+Can someone look into why this happened and why there's no record of it? Also please fix the bulk undo issue, or at least tell me if I'm missing some way to do this that isn't obvious. This has already cost me a lot of time today and made it look like our compliance status is way further along than it actually is.",controls,medium,,,
+dev-controls-007,URGENT: Control showing Passing but process actually failed - need fix ASAP,"This is urgent, please help right away.
+
+Our automated control test ran last night and showed as Passing in the dashboard. But this morning we found out the actual underlying process it's supposed to be checking has failed. So right now the platform is telling us everything is fine (green checkmark, ""Passing"" status) when in reality it is broken.
+
+This is a serious problem because we're relying on this status to know whether things are working, and it's flat out wrong. I don't understand how a test can pass at night and then a few hours later the thing it's testing is already broken, but the status hasn't updated at all - it's still sitting there showing Passing like nothing happened.
+
+I need this looked at immediately because I have no way to work around it - I can't trust the status shown for this control until this is fixed, and I don't know what else might be showing incorrect info. Please escalate this and let me know what's going on as soon as possible.",controls,high,,,
+dev-evidence-000,"File upload stuck on ""Processing""","Hi,
+
+I uploaded a file yesterday and it's still showing ""Processing"" status and hasn't moved past that. I've tried refreshing the page and logging out/back in but it's still stuck the same way.
+
+This is blocking me from moving forward since I can't do anything else with the file until it finishes processing. Can someone take a look and let me know what's going on? Is there a way to force it to reprocess or should I just re-upload it?
+
+Thanks",evidence,medium,,,
+dev-evidence-001,"Upload flow doesn't say what counts as valid evidence - broken/unclear, need answer ASAP","Our auditor is here NEXT WEEK and I still can't figure out what the platform actually wants for evidence on our controls. I've been clicking around the upload section for the last hour and there is zero indication of what's acceptable - no examples, no tooltip, no help text, nothing. Just an upload box.
+
+Is it supposed to be a screenshot? A PDF report exported from another tool? A written policy doc? Log files? I genuinely can't tell, and I don't want to waste more time uploading the wrong thing and having to redo it right before our audit.
+
+This feels like something that should just be shown to us in the UI when we go to upload - instead we're stuck guessing. Can someone please tell me definitively what evidence types are accepted, or better yet fix this so it's not a mystery for every control? I have a bunch of controls to get through and can't keep stopping to ask.
+
+I know I could just email our compliance consultant and ask her what she'd accept manually, but that's slow and honestly the platform should be telling us this itself.
+
+Please advise quickly - we're up against the clock here.",evidence,high,,,
+dev-evidence-002,"Feature request: timeout/alert for evidence files stuck on ""Processing""","Hi,
+
+I uploaded an evidence file to the platform and it's been sitting on ""Processing"" for a while now with no change in status. I ended up just re-doing the upload manually and treating it as if the file was never submitted, which works but isn't great since I have no way of knowing something went wrong until I happen to notice the status hasn't updated.
+
+This would be a good candidate for a feature: could you add some kind of timeout or automatic alert that flags uploads which have been stuck in ""Processing"" for too long, instead of leaving them sitting there indefinitely with no indication anything failed? Even a simple notification or status change to ""failed"" after X minutes/hours would help a lot so we're not stuck guessing whether it's still working or if we need to re-upload.
+
+Thanks for considering this.",evidence,low,,,
+dev-evidence-003,Need bulk upload for evidence - this is urgent,"I have around 50 controls that all need evidence uploaded, and right now I'm having to go into each control one at a time and attach a file, one at a time. This has taken almost the entire week just to get through a fraction of them and I still have a ton left to do.
+
+I need someone to fix this or give me a way to upload evidence in bulk across multiple controls at once - I can't keep doing this one by one, it's not sustainable and it's eating up all my time. Please treat this as urgent, I'm completely stuck until this gets addressed.
+
+Let me know what you can do on your end to get this resolved quickly.",evidence,high,,,
+dev-evidence-004,URGENT: Need an internal review status for evidence before auditor access,"Hi,
+
+We really need the ability to mark evidence as ""internally reviewed"" before it becomes visible to an auditor. Right now it looks like evidence is only ever in one of two states - uploaded or not uploaded - there's no way to flag that someone on our team has actually vetted a piece of evidence before it goes out.
+
+This is a pretty big gap for us. Our internal process requires a sign-off step before anything is considered audit-ready, and without a status field or tag for ""reviewed internally"" vs ""not yet reviewed,"" we have no way to track that inside the platform. We're having to rely on spreadsheets outside the tool to keep track of what's been checked, which defeats the purpose of having everything centralized.
+
+Can you please add a status option (something like ""Pending Review,"" ""Internally Approved,"" etc.) that we can set on each piece of evidence? This is blocking our internal workflow right now and there's no way for us to work around it inside the current system, so I'd appreciate a fast response on whether this is something you can prioritize.
+
+Thanks,",evidence,high,,,
+dev-evidence-005,URGENT: Need a way to recover deleted evidence - please add trash/undo feature,"Hi,
+
+I accidentally deleted a piece of evidence from one of our controls and it looks like it's just gone - no trash folder, no undo option, nothing. I really need this back and can't find any way to restore it myself.
+
+Can someone on your end recover it, or is it actually just permanently lost once deleted? I know the platform currently doesn't have a recovery option, but this needs to change - please add a trash bin or an undo/recovery feature for deleted evidence so this doesn't happen again. This is pretty urgent for me right now since I'm scrambling to re-collect what I lost manually.
+
+In the meantime I'll have to go re-upload/re-gather the evidence by hand, but that's a painful workaround and I'd really like to see some kind of safety net built in so a simple misclick doesn't wipe something out for good.
+
+Please let me know if there's anything that can be done right away, and please pass this along as a feature request if it's not already something you're planning.
+
+Thanks,
+A worried customer",evidence,medium,,,
+dev-evidence-006,URGENT: Evidence upload is broken - can't upload multiple files at once,"This needs to be looked at ASAP. I have been trying to upload evidence for 50 controls and the system is only letting me attach one file at a time, one control at a time. I have spent almost the entire week doing this and I'm still not done.
+
+There has to be a bulk upload option somewhere or this is a bug, because there is no way this is how it's supposed to work for large numbers of controls. Clicking into each control individually, selecting one file, waiting for it to upload, then moving to the next one is incredibly slow and not realistic when you have this many controls to update.
+
+Please fix this or tell me if there's a setting I'm missing to select multiple controls/files at once. I need to get this evidence uploaded quickly and can't keep doing it one by one - this is eating up my whole week.
+
+Thanks",evidence,medium,,,
+dev-evidence-007,"URGENT - missing ""reviewed"" status for evidence (bug?) + policy template question","Hi,
+
+Need help with something fairly urgent. We're going through our evidence uploads right now and I noticed there's no way to actually mark a piece of evidence as internally reviewed. Right now it looks like it's just ""uploaded"" or not there at all - there's no in-between status showing our team has actually checked it before an auditor would ever see it.
+
+This seems like it should be basic functionality so I'm assuming it's a bug or something got turned off? We need a way to flag evidence as internally vetted so we know at a glance what's been checked and what still needs eyes on it. Right now the only workaround I can think of is keeping a separate spreadsheet on the side to track what's been reviewed, which is slow and error-prone when we have a lot of items to get through. Can you fix this or point me to the setting I'm missing? Would appreciate a fast response since we're trying to get through this backlog quickly.
+
+Separate but related thing while I have you - can someone explain how policy template customization and approvals are supposed to work? We edited one of the default policy templates and it wasn't clear whether it needed to go through some kind of approval step before it counted as ""final,"" or if editing it just automatically updates it. It would help to understand the intended flow there too, in case that's tied into the same review process I'm asking about above.
+
+Thanks,
+Daniel",evidence,medium,,,
+dev-integrations-000,Permission/scope error when connecting integration,"Hi,
+
+I'm trying to set up the integration and I keep getting a permissions/scope error during the connection process. It doesn't complete and just kicks back an error about missing scopes.
+
+Can someone on your end take a look and get this fixed so the connection goes through properly? I'd rather not have to keep doing things manually on the source system side if I can avoid it, since that's slower and I'll need this working correctly, especially with our audit coming up later this year.
+
+Let me know if you need any info from me to sort this out.
+
+Thanks",integrations,low,,,
+dev-integrations-001,Need clarification before disconnecting an integration - will we lose collected evidence?,"We're planning to disconnect one of our integrations (switching tools on our end) and before I do that I need a straight answer: what happens to the evidence that's already been collected and attached to our controls from that integration once it's disconnected?
+
+The disconnect confirmation popup doesn't say anything about this one way or the other, and honestly that's making me nervous. We have an audit coming up later this year and if disconnecting wipes out or detaches evidence we've already gathered, that's a serious problem for us - we'd have to go back and manually re-document a bunch of controls, which is not something I want to do if it can be avoided.
+
+I need someone from your team to confirm definitively whether existing evidence stays intact and attached after disconnecting, or if it gets removed. This should honestly be stated clearly in the disconnect dialog itself so people aren't left guessing - right now it just feels like we're rolling the dice.
+
+We like the platform overall, but we're seriously reconsidering whether to keep relying on it if basic things like this aren't communicated clearly, especially with an audit on the horizon. Please get back to me with a real answer and let me know if this warning is going to be added to the disconnect flow.",integrations,high,,,
+dev-integrations-002,URGENT - Need feature to fix permission/scope error when connecting integration,"Hi,
+
+We're trying to connect one of our integrations and keep hitting a permission/scope error every time we authorize it. This is completely blocking us - there's no way around it on our end and we need this resolved fast.
+
+I know this isn't something the product currently handles, but we really need a feature added that lets the connection go through without hitting this scope wall. Right now it just fails outright and we can't get past it no matter what we try. We have an audit coming up down the line and need this integration working well before then, so please prioritize building this out.
+
+Please treat this as urgent - we are stuck until this gets fixed. Let me know timeline on when this can be addressed.
+
+Thanks",integrations,high,,,
+dev-integrations-003,Cannot connect on-prem Active Directory - integration broken,"We're trying to set up our identity provider integration and it's not working for our on-premises Active Directory setup. I've gone through the integration setup multiple times and it only seems to want to talk to cloud-based providers - nothing shows up or connects for our on-prem AD.
+
+This is a critical blocker for us right now. We can't move forward with access reviews or user provisioning without this connection working, and there's no workaround on our end. We've already spent way more time than we should have troubleshooting this on our side assuming we were misconfiguring something, but at this point it seems like the integration itself just isn't functioning for on-prem directories.
+
+Honestly, this is becoming a serious issue for us. We chose your platform assuming basic AD connectivity would be supported since that's our primary directory source, and running into this wall now has us questioning whether this is the right tool for our compliance program. My leadership is asking why this isn't working and I don't have a good answer for them. We're actively looking at alternative platforms if this can't be resolved quickly.
+
+Please advise on how to fix this or get someone to look into why the on-prem AD connection isn't working. We need this resolved ASAP.",integrations,high,,,
+dev-integrations-004,URGENT: Connecting integration to test it immediately started pulling real evidence,"We just connected one of our integrations to see how it works before actually committing to using it for evidence collection, and as soon as we authorized it, it started pulling in real evidence right away. We were not ready for this at all - we just wanted to check the connection flow and settings first.
+
+This seems like a bug - there should be some kind of test or preview mode when you connect an integration so it doesn't immediately start collecting live evidence. Right now there's no way to just ""try it out"" without it going live instantly.
+
+This is blocking us right now and we need this fixed ASAP. Can someone please look into this urgently? We don't want to leave the current evidence collection running when it wasn't supposed to start yet, but we also don't see any way to stop it or undo it.
+
+Please advise as soon as possible.",integrations,high,,,
+dev-integrations-005,AWS integration pulls entire account - need to scope to specific resources ASAP,"We're trying to connect our AWS account for the audit evidence collection and it looks like your integration is broken - it's pulling in EVERYTHING in the account instead of letting us select just the resources/services we actually want monitored for this audit.
+
+We do NOT want the whole account connected. We have other projects and services in there that are completely out of scope and shouldn't be touched by this tool at all. There's no option anywhere in the setup flow to limit this to a subset - it just grabs the whole account or project. That can't be intended behavior, and if it is, that's a serious problem for us.
+
+Our auditors are already scheduling walkthroughs and we cannot move forward with evidence collection until this is fixed or we get a real answer on how to scope it down. This is currently a total blocker - there's no workaround on our end, we've tried restricting via IAM policies on our side and it doesn't change what the integration pulls in.
+
+Honestly, this is a big deal for us. We picked your platform specifically because we were told it integrates cleanly with AWS, and finding out now - in the middle of prepping for our audit - that we can't limit scope is putting the whole engagement at risk. I've got leadership asking me why this isn't working, and I need to give them a real answer today. If this can't be resolved quickly we're going to have to seriously look at other options.
+
+Please advise urgently.",integrations,high,,,
+dev-integrations-006,On-prem Active Directory integration is broken / not connecting,"We've spent the better part of two days trying to get our identity provider connected and it just does not work. We are running on-prem Active Directory (not Azure AD, our actual on-prem AD), and no matter what we do in the integrations panel, there's no way to actually get it to connect. It just doesn't show up as an option that functions correctly.
+
+Is this a bug on your end? Every cloud IdP we've tried connects fine, but our on-prem directory setup fails every time. This is genuinely holding up our access review work because now we have to manually pull user lists and permissions by hand instead of having it sync automatically like it's supposed to.
+
+Can someone please look into this and get on-prem AD actually working? We can't be the only customer running a hybrid or on-prem setup. This is costing us a lot of time and making it look like we don't have our access reviews under control when really it's the tool not connecting properly.
+
+Please advise ASAP.",integrations,medium,,,
+dev-integrations-007,Integration started pulling real evidence immediately after connecting - no test mode,"Hi,
+
+We connected one of our integrations just to see how it worked and what data it would pull in, but it immediately started collecting live evidence from our systems instead of giving us a chance to preview or configure anything first. We weren't ready for that yet - we were just trying it out to understand the setup before committing to it.
+
+This is a problem right now because we're in the middle of prepping for an audit and can't have evidence collection kicking off before we've actually reviewed and confirmed the integration settings are correct. We ended up having to disconnect it and manually check things instead, which is obviously slower and not ideal given the timeline we're on.
+
+Can you please look into this? There should be some kind of test or preview mode before an integration goes live and starts pulling real evidence, right now it seems to just start collecting immediately once you authorize it, which feels like a bug.
+
+Thanks,",integrations,high,,,
+dev-policies-000,Employee acknowledgment showing as incomplete - question on how this works,"Hi,
+
+I have an employee whose policy acknowledgment is showing as not completed in the dashboard, but they've told me they already went through and acknowledged the policy previously. I double checked and I can see they did acknowledge it at some point, so I'm not sure why it's now showing as outstanding.
+
+Is there something about how acknowledgments are tracked that would cause a previously completed one to no longer count? I want to understand if this is expected behavior or something is going wrong, since I don't want to make a wrong assumption when reporting our compliance status.
+
+We have our audit starting very soon, so I need to get this sorted quickly - our auditor will be looking at completion status and I want to make sure the numbers are accurate before they start reviewing. I can have the employee just re-acknowledge it manually as a workaround if needed, but I'd like to know why it happened in the first place so I can explain it if this comes up again with other employees before the audit is done.
+
+Thanks for the clarification.",policies,high,,,
+dev-policies-001,PDF export is broken / missing for policies,"I need to export our published policy as a PDF to send to a client who is asking for proof of our security policy, and I cannot find any way to do this anywhere on the policy detail page. There's no ""Export"" or ""Download PDF"" button anywhere that I can see.
+
+This is honestly pretty frustrating - I've been on this page for 15 minutes clicking around trying to find it, and had to just tell the client I'd ""get back to them"" which makes us look disorganized. Is this feature actually broken, or was it removed? I've used other compliance platforms before and exporting a policy as a PDF was always a basic, obvious feature.
+
+For now I guess I'll just have to manually copy the policy text into a Word doc and convert it myself, but that's a ridiculous workaround for something that should just be a button click. Can you please look into why this isn't working and get it fixed? We need this pretty regularly for client requests so it's a real time sink every time it comes up.",policies,medium,,,
+dev-policies-002,Employee acknowledgment showing as incomplete - question,"Hi,
+
+I have an employee (Jordan in our system) who I know acknowledged our Security Policy a while back, but the dashboard is showing his acknowledgment as incomplete/outstanding.
+
+Is there a reason an acknowledgment would stop counting after it was already done? I don't see any error, it's just listed as not done now. I can have him re-acknowledge it manually as a workaround, but I wanted to check first if this is expected behavior or if something is off, since from what I remember he already completed this.
+
+Just trying to understand how this is supposed to work before I go through and manually redo it for anyone else who might be affected.
+
+Thanks",policies,low,,,
+dev-policies-003,URGENT - Need manager approval step for policy acknowledgments,"Hi,
+
+We need the ability to require a manager's sign-off in addition to the employee's own acknowledgment when it comes to our high-risk policies (things like data handling, access control, etc.). Right now the workflow only has the employee acknowledge the policy themselves, and there's no second step for a manager to review and approve that acknowledgment.
+
+This is pretty urgent for us - we really need a two-step process here where the employee acknowledges first and then their manager has to sign off separately before it's considered complete. Can this be added as a feature? We know it's not something the platform currently supports, but it's a gap we need closed.
+
+In the meantime I guess we can track manager sign-offs manually outside the system, but that's a lot slower and more error-prone than having it built into the acknowledgment workflow itself.
+
+Please let me know if this is something that can be prioritized soon.
+
+Thanks",policies,medium,,,
+dev-policies-004,Managers need a way to see if their team acknowledged policies,"This is honestly kind of frustrating. One of my direct reports told me they acknowledged a policy, but I have no way to confirm that from my end as their manager. I had to go dig through the policy's own page and manually scroll through the list of everyone in the company who has acknowledged it just to find their name - that's not something I should have to do every time I want to check on my own team's status.
+
+I get that acknowledgment status shows up on the policy page itself, but there's no view for managers to just see their direct reports and where they stand on acknowledgments. I shouldn't have to comb through a company-wide list to figure out who on my team has completed something.
+
+Can you build a manager-facing dashboard or view that shows acknowledgment status scoped to just the people who report to us? Right now it makes it look like I'm not tracking my team's compliance when really I just don't have a tool that lets me see it easily. This has already cost me time and made me look disorganized in front of my own team when I couldn't quickly answer a simple question about who had signed off on something.
+
+Please consider adding this - it seems like a pretty basic need for anyone managing a team in this platform.",policies,medium,,,
+dev-policies-005,Custom review reminder for a policy isn't working / not possible?,"We have a policy that needs to be reviewed on a shorter cycle than once a year, but no matter what I do the system only ever sets the reminder for the standard annual review. I've tried changing the review date on the policy multiple times expecting it to let me set a different cadence, but it just keeps defaulting back to annual.
+
+This is really frustrating because it means I have to manually track and remind myself to review this policy on the correct schedule instead of relying on the platform to do it, which is the whole point of using this tool. Is this a bug, or is there actually no way to set a custom review reminder cadence for an individual policy?
+
+If it's not supported, please treat this as a bug report because it seems like a pretty basic feature that should be there. Can someone look into this or tell me if there's a setting I'm missing?",policies,medium,,,
+dev-policies-006,URGENT: Manager approval missing from policy acknowledgment workflow - blocking audit,"We are in the middle of prepping for our audit and just discovered a bug in the policy acknowledgment workflow that's holding things up.
+
+For our high-risk policies, we need BOTH the employee to acknowledge the policy AND a manager to sign off/approve it afterward. Right now the system only lets the employee acknowledge - there's no second step or field for a manager's approval. It just marks the policy as ""acknowledged"" once the employee clicks through, with no way to add a manager sign-off on top of that.
+
+This is a real problem for us because our auditor is expecting to see manager-level approval documented for these policies, not just employee acknowledgment. Right now all we have is a single acknowledgment step, which isn't going to satisfy the requirement.
+
+I know we could try to work around this manually (e.g., have managers sign off outside the tool and keep separate records), but that's slow and messy, and honestly not something we want to be doing right before an audit review.
+
+Can someone please look into this ASAP and let me know if there's a fix or a setting we're missing? We need this resolved quickly since our audit prep is already underway and this is blocking us.
+
+Thanks,",policies,high,,,
+dev-access_management-000,Invited teammate never received invite email,"Hi,
+
+I invited a teammate to join our workspace last week but they still haven't received the invite email. They checked spam/junk folders and it's not there either. I tried having them search for it directly and nothing shows up.
+
+Can you check on your end why the invite email never went out? They need access and can't get in, so this is blocking us right now.
+
+Let me know what you find or if you need any info from me to look into it.
+
+Thanks",access_management,medium,,,
+dev-access_management-001,Removed user still showing up in access review,"Hi,
+
+I removed a user from our platform a while back, but they're still showing up in the latest access review snapshot as if they still have access. I confirmed on our end that their account was deactivated/removed, so I'm not sure why the review is still pulling them in.
+
+I can manually mark them as removed/resolved in the review for now, but that's obviously not ideal if this is going to keep happening. We have an audit coming up in the next few months, so I'd like to get this sorted before then.
+
+Can you take a look and let me know why this is happening? Let me know if you need the user's name or the specific review ID.
+
+Thanks",access_management,low,,,
+dev-access_management-002,Feature request: notify us when an invite expires / never got the email,"I invited a teammate to the platform over a week ago and they never got the invite email. I had them check spam, promotions, everything - nothing. I even had them try clicking the original link just now and it just doesn't work, no explanation, nothing.
+
+This is honestly ridiculous. There's zero indication anywhere in the app that the invite failed or expired or whatever happened to it. I only found out because I asked my teammate directly why they hadn't logged in yet. If I hadn't followed up, I'd have just assumed they were ignoring it.
+
+I'm asking that you build some kind of notification system so that when an invite isn't accepted (whether it expired, bounced, whatever), the admin who sent it actually gets alerted instead of just silently failing with no feedback. Right now there's no way to know an invite didn't go through unless you happen to check in with the person manually. That's a bad system for something as basic as inviting a user.
+
+This has already cost me time chasing down why my teammate couldn't get in, and it makes us look disorganized when we're trying to get people set up. Please add some kind of status/alert for invites so this doesn't keep happening.",access_management,high,,,
+dev-access_management-003,Need a role option between Contributor and Admin - billing access issue,"We're in the middle of prepping for an audit and this is really slowing us down. I need to give someone on my team access to do some work in the platform (approving evidence, updating tasks, etc.) but the only roles I can pick from are Contributor and Admin. Contributor doesn't give them what they need to do the task, but bumping them to Admin gives them full access to our billing info too, which I do NOT want.
+
+This is a pretty basic thing - I just need a role that has the permissions of a Contributor but without billing visibility, or honestly any way to customize what a role can see. Right now I either have to leave someone blocked or hand out access they shouldn't have, and neither of those is acceptable, especially with an audit going on right now.
+
+I know I can work around this for now by just doing things manually myself instead of assigning the role, but that's slow and not sustainable if this keeps coming up. Can you please build out more granular/custom role options so we're not stuck choosing between ""can't do the job"" and ""sees stuff they shouldn't""? This needs to get fixed soon, we can't keep working around it every time we onboard someone new.",access_management,high,,,
+dev-access_management-004,URGENT: Need bulk/CSV invite feature - onboarding 15 people one-by-one is blocking us,"Hi,
+
+We just tried to onboard a new team of 15 people into the platform and realized there's no way to invite multiple users at once - I had to send each invite individually, one at a time. This is really slow and not workable for us, especially since we'll likely need to add more people soon.
+
+Can you please add a bulk invite option, ideally via CSV upload? Something where I can just upload a spreadsheet with names/emails and roles and have it send all the invites at once would be huge.
+
+This is urgent for us - we're completely blocked from getting the rest of our team set up until this is resolved, and there's no workaround I can find on my end. We also have an audit coming up down the line, so we need everyone properly set up in the system well before then.
+
+Please let me know if this is something that can be prioritized soon, or if there's any timeline for when bulk invites might be supported.
+
+Thanks,
+Maria",access_management,high,,,
+dev-access_management-005,Feature request: scope access reviews to a single framework,"Right now when I start an access review, it pulls in every user and system across the whole account rather than just the ones tied to a specific framework we're reviewing. We only need to review access relevant to one framework at a time, but there's no option to limit the scope like that - it's all or nothing.
+
+Could you add the ability to scope an access review to just the users and systems associated with a single framework? Right now we have no way to narrow it down, so every review ends up covering a lot more than we actually need it to.
+
+Thanks.",access_management,medium,,,
+dev-access_management-006,URGENT: Need a role that has Contributor access but NOT billing visibility - blocked before audit,"Hi,
+
+We're in the middle of prepping for our audit and I need to add a team member so they can help with evidence collection, but I'm stuck on permissions.
+
+When I go to assign a role, the only options I see are Contributor and Admin (and Viewer, but that's too limited for what they need to do). The problem is Contributor doesn't give them enough access to do the task I need, but Admin gives them full billing visibility, which I do NOT want - this person has no reason to see our billing/subscription info and I don't want to open that up just to get them access to the compliance tasks.
+
+Is there a way to create a custom role or otherwise scope down Admin so it excludes billing? Or is there a setting I'm missing that would let me grant Contributor-level (or higher) access without exposing billing?
+
+This is blocking me right now since the audit prep is underway and I need this person working today. Please let me know ASAP if there's a way to do this or if it's something you're able to fix quickly - I don't have a workaround on my end.
+
+Thanks,",access_management,high,,,
+dev-audits-000,Auditor can't see evidence that's clearly in our account - this needs to be fixed ASAP,"My auditor is telling me they cannot access a piece of evidence that I know for a fact is uploaded and attached in our account. I've double checked and the evidence is there on our end, visible to me, but when they log in through the auditor access you set up, it's just not showing up for them.
+
+This is a real problem. We have our audit scheduled for later this quarter and if the auditor can't pull the evidence they need through the platform, this whole ""streamlined audit"" pitch falls apart. Right now I'm having to screenshot and email things over manually just to keep things moving, which is exactly what we signed up to NOT have to do.
+
+Honestly this is starting to make me question whether the auditor access feature actually works the way it's supposed to. Can someone look into why evidence that's clearly attached and visible in our account isn't showing up on the auditor's side? We need this resolved - I don't want to have to explain to our leadership why we're paying for a compliance platform that our own auditor can't use properly.
+
+Please treat this as urgent. Let me know what you need from me to get this fixed.",audits,high,,,
+dev-audits-001,Need clear visibility/control over what auditors can see before I invite ours in,"Our audit kicks off in the next few days and I'm stuck because I have no idea what my auditor will actually be able to access once I send the invite. The invite dialog just asks me to enter their email and pick a framework - it doesn't tell me anywhere what ""scope"" that gives them. Do they see everything in our account? Just the one framework I'm auditing for? All evidence across every framework? I have zero visibility into this before I click send, and once they're in, there's no way for me to check or adjust it.
+
+This isn't a ""how do I configure it"" question - I know there's currently no way to do this in the product, and that's exactly the problem. We need an actual feature that lets us see and control auditor access before and after inviting them - a permissions screen, a preview, something. Right now I'm being asked to just trust the invite blindly with an outside party about to be in our system, and that's not something I can sign off on without knowing what they can touch.
+
+I've already had to loop in our leadership on this because we can't move forward with the audit until this is resolved, and honestly we're now looking at whether this platform is even going to work for us long term if something this basic isn't addressed. We're blocked completely - there's no workaround I've found. Please escalate this and let me know what your timeline is for adding real visibility into auditor permissions, because we need it fast.",audits,high,,,
+dev-audits-002,URGENT: Auditor cannot access evidence - need this fixed today,"Hi,
+
+My auditor just messaged me saying they cannot access one of the evidence files I uploaded for them to review. This is time sensitive - they're actively working through our audit right now and this is holding them up.
+
+Can someone please look into why the evidence isn't showing up on their end and fix the access so they can see it? I don't want this to delay the audit any further.
+
+If there's something I need to do on my end to grant them access, please tell me exactly what and I'll do it right away, but I need this resolved as fast as possible today.
+
+Thanks,
+James",audits,medium,,,
+dev-audits-003,Certificate missing scope of systems - need this fixed ASAP,"Hi,
+
+We just downloaded our certificate and noticed it doesn't list which systems or boundaries were actually included in the audit. A couple of our customers are asking us for that detail right now as part of their vendor review, and we don't have anything to give them.
+
+We have an audit starting very soon and need this sorted before then, so can someone please update or reissue the certificate with the systems/scope listed on it? There's no way for us to work around this on our end, so we're stuck until it's corrected.
+
+Separately, while I have you - can someone take a look at our account setup? I want to double check our subscription tier and billing are set up correctly, since we've had some changes on our team recently and I'm not 100% sure everything is aligned with what we're actually using. Would appreciate a quick review of that as well when you get a chance.
+
+Thanks,",audits,high,,,
+dev-audits-004,Auditor still has access months after audit ended,"Hi,
+
+We finished our SOC 2 audit a few months back, but I just noticed the external auditor we invited to the platform still has active access to our account. I would have expected that to get shut off automatically once the engagement was done, but it looks like it's still there.
+
+Is this a bug, or is there something we're supposed to be doing on our end to remove auditor access after an audit closes out? Right now I can't find any setting or option to revoke it myself, so we're stuck with their account still active.
+
+We have another audit coming up down the line, so I'd like to get this sorted before then. Can you take a look and let me know what's going on?
+
+Thanks",audits,medium,,,
+dev-audits-005,Surveillance audit - old evidence not carrying forward automatically,"We're currently prepping for our surveillance audit and noticed that none of last year's evidence is showing up as attached for the controls this cycle, even though nothing has changed for those controls since the previous audit.
+
+Is this a bug? I would expect the system to carry forward evidence that's still valid instead of requiring us to manually re-upload the exact same files again. Right now it looks like every piece of evidence needs to be re-attached individually, which is going to take a lot of time we don't really have - our auditor is expecting things to be ready very soon.
+
+Can someone confirm whether this is expected behavior or something that's broken on our end? If there's no fix available quickly, we'll just go through and re-upload everything manually, but wanted to flag this in case it's a glitch that needs fixing.",audits,high,,,
+dev-audits-006,Certificate missing system/boundary scope - blocking us with customers RIGHT NOW,"We just downloaded our SOC 2 certificate from the platform and it does not list which specific systems, products, or boundaries were actually covered by the audit. We have three enterprise customers who are actively asking us for this before they'll sign off on renewal, and we have nothing to give them. This is holding up deals that need to close this week.
+
+I understand this isn't something the platform currently does, but honestly at this point it needs to be built in - a compliance certificate without defined scope is basically useless for anything beyond checking a box. We can't hand this to a customer's security team and expect them to accept it.
+
+There is no workaround on our end - we can't manually edit the certificate ourselves, and we can't get around this by generating another report. We are stuck waiting on you.
+
+I'll be honest, this is putting our renewal decision with you in question. We've been happy with the platform overall, but if we can't get a certificate that actually reflects our audit scope, we're going to have to start looking at other options and I'll need to raise this with my leadership. Please tell me this is something you can prioritize and give me a timeline, because our audit is happening now and we need this resolved fast.",audits,high,,,
+dev-account_billing-000,Cannot cancel subscription - no cancel button anywhere,"I've been trying to cancel our subscription for the last 20 minutes and there is no way to do it. I've clicked through every menu I can find - billing, settings, account, profile - and there is no ""cancel subscription"" button or link anywhere in the app.
+
+This is really frustrating. Other tools I use let you cancel in like two clicks, but here I can't find anything. Is this feature actually missing, or is it just broken/hidden somewhere? I even tried logging in as different roles to see if maybe it's a permissions issue, but still nothing.
+
+Can someone please tell me how to actually cancel, or fix whatever is preventing the option from showing up? I don't want to have to email support every time just to stop a subscription - that shouldn't be necessary.",account_billing,medium,,,
+dev-account_billing-001,Missing receipt/invoice for a charge - blocking our audit,"We have a charge on our account that has no receipt or invoice attached to it anywhere in the billing section. I've checked the billing history page and the invoices tab multiple times and there is just nothing there for this specific charge - every other charge has a PDF I can download, but this one is completely missing.
+
+This is a serious problem right now because our auditor is actively going through our documentation and needs proof of this transaction. I can't move forward without it and there's no way for me to generate or download it myself from the dashboard.
+
+Can someone please look into why this receipt was never generated and get me a copy ASAP? This is holding up our entire audit process and I need this resolved urgently. Please advise on timeline.",account_billing,high,,,
+dev-account_billing-002,"Payment method update keeps failing - need this fixed ASAP, audit in progress","I'm trying to update the payment method on our account and it keeps failing every time I submit it. No useful error message, just fails. I've tried two different corporate cards now and both get rejected.
+
+Can someone tell me why this is happening and whether it's expected behavior? Is there some kind of verification charge being made when you add a card? If so, is there a way to know in advance if that's going to be a problem, because right now I have no idea what's actually going wrong on my end.
+
+I'll say this is extremely frustrating timing - we're in the middle of an audit right now and I need billing sorted out so we don't run into access issues or interruptions with the platform while our auditor is actively working through things. This is not a great look on my end when something as basic as updating a card doesn't work.
+
+I know I could probably get finance to call the bank and sort out whatever is blocking it, but I shouldn't have to do that just to update a payment method, and honestly I don't have time to chase that down right now with everything else going on. Can someone explain what's actually happening here and let me know if there's a faster way to get this resolved?",account_billing,high,,,
+dev-account_billing-003,Unclear billing when adding seats mid-cycle - possible overcharge?,"Hi,
+
+We just added 10 new users to our account partway through the billing month, and now I'm not sure what we're actually being charged for them. Nowhere in the flow when adding the seats did it show whether we'd be billed a prorated amount for the rest of the cycle or the full monthly seat price.
+
+I checked the billing/invoice page and it doesn't break this out either, so right now I have no way to confirm if we're being charged correctly. This seems like something that should be clearly shown before or right after adding seats, since otherwise there's no way to verify the charge is right.
+
+Can you look into this? Right now the only way I can figure out the correct amount is to manually calculate the days remaining in the cycle and multiply it out myself, which is doable but time-consuming and shouldn't be necessary.
+
+Please let me know what's going on and if this is something that can be fixed so it's visible in the app.
+
+Thanks,",account_billing,low,,,
+dev-account_billing-004,Billing cycle doesn't match our fiscal year - broken invoice scheduling,"This is becoming a serious problem for us. Our invoices are cycling based on whenever we happened to sign up, not our actual fiscal year, and finance is now flagging this as a mismatch heading into our audit. We need our billing period aligned to our fiscal year, not some arbitrary signup date - this should be a basic configuration option and right now it just isn't working the way it should.
+
+I looked through the account settings and billing preferences and there's nothing there that lets us set this. I know we could technically go in and manually adjust/reconcile each invoice period by hand to line up with our fiscal year, but that's extremely time-consuming and error-prone, and honestly not something we should have to do every single cycle just to get accurate records for an audit.
+
+We have auditors expecting clean, aligned documentation very soon, and this is holding that up. I need to know if this can be fixed on your end or if there's a real setting for this that I'm missing, because right now it feels like a fundamental gap in the product. If this can't be resolved quickly, I'll need to escalate this internally and we're going to have to seriously reconsider whether this platform can support our compliance needs going forward.
+
+Please advise ASAP.",account_billing,high,,,
+dev-account_billing-005,Need payment method updated - billing Admin no longer with company,"Hi,
+
+Our billing Admin left the company recently and it looks like nobody else on our account has the permissions needed to update the payment method. We tried logging in with other user roles but the option to change billing/payment details just isn't available to us.
+
+Can you please help us either get access to update the payment method ourselves or make the change on our end? We need to get this sorted since we can't process any billing updates right now.
+
+For context, we do have an audit coming up down the line, so we'd like to get our account back in order before then, but the immediate issue is just getting someone with the right access to update the payment info.
+
+Let me know what you need from us to get this resolved - happy to provide verification or account details as needed.
+
+Thanks",account_billing,medium,,,
+dev-account_billing-006,Feature Request: Show proration/billing impact before adding seats,"We're about to add 10 users to our account mid-month and I have no idea whether we're going to be charged a prorated amount for the rest of the cycle or hit with the full seat price for all 10. There's nothing in the app when you go to add users that tells you how it'll be billed - no estimate, no breakdown, nothing. I had to reach out just to ask this basic question.
+
+This needs to be built into the product. Before we commit to adding seats, we should be able to see exactly what it's going to cost us - whether it's prorated, what the amount will be, when it'll show up on the invoice, all of it. Right now we're flying blind and have to guess or contact support every single time we need to scale up our team, which isn't sustainable for us.
+
+I know we could theoretically call or email every time and wait for someone to manually calculate it out for us, but that's slow and honestly kind of ridiculous for something that should just be visible in the billing/seat management screen. We're actively comparing other platforms right now, and this kind of basic billing transparency is something competitors already handle. If this isn't something you're planning to fix, we need to know so we can factor that into our decision about staying on this platform.
+
+Please let me know if this is on your roadmap.",account_billing,high,,,
