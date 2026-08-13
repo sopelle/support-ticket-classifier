@@ -17,6 +17,8 @@ Set the Claude API key in a `.env` file (see `.env.example`).
 - Pin dependencies to exact versions in `requirements.txt`.
 - The README is the project's showcase. Update it in the same commit whenever results, commands, or project structure change.
 - Numbers claimed in the README must come from an actual evaluation run, never from an estimate. If a run has not happened yet, say so instead of guessing.
+- Nothing outside `domains/` may depend on a specific domain pack. Tests especially: naming a category (`Category.EVIDENCE`) breaks on every other pack : take one positionally with `next(iter(Category))`.
+- When a docstring, comment or README line cites something that comes from a domain pack — a category name, a path under `domains/<name>/`, a count of causes, an observed dev/test gap : say it is an example measured on the default pack, not a property of the system. The reasoning stays; the reader needs to know what would change under a different pack.
 
 ## Architecture
 
